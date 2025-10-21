@@ -1,21 +1,13 @@
 ---
-import PlotFigure from "../components/PlotFigure.astro";
 import Layout from "../layouts/Layout.astro";
-import * as Plot from "@observablehq/plot";
-import penguins from "../assets/penguins.json";
+import SimulateurVoyage from "../components/SimulateurVoyage.astro";
+import CarteXP from "../components/carteXP.astro";
 ---
 
-<Layout>
-  <h1 class="text-2xl">Test Astro et Plot (Observablehq)</h1>
-  <PlotFigure
-    options={{
-      marks: [
-        Plot.dot(penguins, {
-          x: "culmen_length_mm",
-          y: "culmen_depth_mm",
-          stroke: "species",
-        }),
-      ],
-    }}
-  />
+<Layout title="Simulateur de Voyage">
+  <h1 class="text-3xl font-bold text-center mb-8">
+      Simulateur de Voyage
+  </h1>
+  <SimulateurVoyage />
+  <CarteXP />
 </Layout>

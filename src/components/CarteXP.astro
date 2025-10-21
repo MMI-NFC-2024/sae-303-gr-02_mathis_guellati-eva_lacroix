@@ -1,0 +1,137 @@
+---
+import garesAvecActivitesData from "../assets/garesAvecActivites.json";
+import departementsgeojsonData from "../assets/departementsgeojson.json";
+
+const garesSorted = garesAvecActivitesData
+    .filter((d) => d.nombrePOI != null)
+    .sort((a, b) => b.nombrePOI - a.nombrePOI);
+---
+
+<div class="w-full max-w-7xl mx-auto font-sans">
+    <div class="mb-6">
+        <label
+            for="gare-search"
+            class="block text-base font-semibold mb-2 text-gray-800"
+        >
+            Sélectionner une gare
+        </label>
+        <input
+            type="text"
+            id="gare-search"
+            class="w-full px-4 py-3 text-base border-2 border-gray-300 rounded-lg outline-none transition-colors duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+            placeholder="🔍 Rechercher une gare..."
+            list="gares-list"
+        />
+        <datalist id="gares-list">
+            {garesSorted.map((gare) => <option value={gare.nom} />)}
+        </datalist>
+    </div>
+
+    <div
+        id="map-plot"
+        class="w-full overflow-x-auto rounded-lg shadow-lg bg-white"
+    >
+    </div>
+
+    <p class="mt-4 text-sm text-gray-600 text-center italic">
+        Nombre de points d'intérêt touristiques accessibles par gare (rayon 10
+        km). | Sources : Base Gares SNCF & Open Data Tourisme
+    </p>
+</div>
+
+<script>
+    import * as Plot from "@observablehq/plot";
+    import * as d3 from "d3";
+    import garesAvecActivitesData from "../assets/garesAvecActivites.json";
+    import departementsgeojsonData from "../assets/departementsgeojson.json";
+
+    const garesAvecActivites = garesAvecActivitesData
+        .filter((d) => d.nombrePOI != null)
+        .sort((a, b) => b.nombrePOI - a.nombrePOI);
+
+    const departementsgeojson = departementsgeojsonData;
+
+    let selectedGare = null;
+
+    function createMap(selectedGare) {
+        const container = document.getElementById("map-plot");
+        if (!container) return;
+
+        container.innerHTML = "";
+
+        const plot = Plot.plot({
+            width: 1200,
+            height: 700,
+
+            projection: {
+                type: "mercator",
+                domain: departementsgeojson,
+            },
+
+            color: {
+                legend: true,
+                scheme: "Turbo",
+                domain: [0, d3.max(garesAvecActivites, (d) => d.nombrePOI)],
+            },
+
+            marks: [
+                Plot.geo(departementsgeojson, {
+                    fill: "#fafafa",
+                    stroke: "#ddd",
+                }),
+
+                Plot.dot(garesAvecActivites, {
+                    x: "longitude",
+                    y: "latitude",
+                    r: (d) => Math.sqrt(d.nombrePOI) * 2.5,
+                    fill: "nombrePOI",
+                    stroke: "white",
+                    strokeWidth: 1.5,
+                    opacity: (d) =>
+                        !selectedGare
+                            ? 0.8
+                            : d.nom === selectedGare.nom
+                              ? 1
+                              : 0.2,
+                    tip: true,
+                    channels: {
+                        Gare: "nom",
+                        Région: "region",
+                        Activités: "nombrePOI",
+                    },
+                }),
+
+                selectedGare &&
+                    Plot.text([selectedGare], {
+                        x: "longitude",
+                        y: "latitude",
+                        text: (d) => `${d.nom}\n${d.nombrePOI} activités`,
+                        dy: -15,
+                        fontSize: 12,
+                        fontWeight: "bold",
+                        fill: "#dc2626",
+                        stroke: "white",
+                        strokeWidth: 4,
+                    }),
+            ],
+        });
+
+        container.appendChild(plot);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        createMap(null);
+
+        const searchInput = document.getElementById("gare-search");
+        if (searchInput) {
+            searchInput.addEventListener("input", (e) => {
+                const searchValue = e.target.value;
+                const found = garesAvecActivites.find(
+                    (g) => g.nom === searchValue,
+                );
+                selectedGare = found || null;
+                createMap(selectedGare);
+            });
+        }
+    });
+</script>
