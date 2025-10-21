@@ -1,0 +1,200 @@
+---
+const transports = [
+    {
+        nom: "Train",
+        emoji: "🚂",
+        champ: "train_empreinte_carbone_kgco2e",
+        description: "Train longue distance",
+    },
+    {
+        nom: "Autocar",
+        emoji: "🚌",
+        champ: "autocar_longue_distance_empreinte_carbone_kgco2e",
+        description: "Autocar longue distance",
+    },
+    {
+        nom: "Avion",
+        emoji: "✈️",
+        champ: "avion_empreinte_carbone_kgco2e",
+        description: "Vol commercial",
+    },
+    {
+        nom: "Voiture électrique",
+        emoji: "🔋",
+        champ: "voiture_electrique_2_2_pers_empreinte_carbone_kgco2e",
+        description: "Voiture électrique (2 pers.)",
+    },
+    {
+        nom: "Voiture thermique",
+        emoji: "⛽",
+        champ: "voiture_thermique_2_2_pers_empreinte_carbone_kgco2e",
+        description: "Voiture essence/diesel (2 pers.)",
+    },
+];
+---
+
+<div class="w-full max-w-6xl mx-auto">
+    <div id="emissions-chart" class="w-full overflow-x-auto"></div>
+
+    <p class="mt-4 text-sm text-gray-600 text-center italic">
+        Émissions moyennes de CO₂ par moyen de transport (toutes routes
+        confondues) | Sources : Base de données comparatives des émissions de
+        CO₂ – data.gouv.fr
+    </p>
+</div>
+
+<script>
+    import * as Plot from "@observablehq/plot";
+    import * as d3 from "d3";
+    import dataEmission from "../assets/data_emission.json";
+
+    const transports = [
+        {
+            nom: "Train",
+            emoji: "🚂",
+            champ: "train_empreinte_carbone_kgco2e",
+            description: "Train longue distance",
+        },
+        {
+            nom: "Autocar",
+            emoji: "🚌",
+            champ: "autocar_longue_distance_empreinte_carbone_kgco2e",
+            description: "Autocar longue distance",
+        },
+        {
+            nom: "Avion",
+            emoji: "✈️",
+            champ: "avion_empreinte_carbone_kgco2e",
+            description: "Vol commercial",
+        },
+        {
+            nom: "Voiture électrique",
+            emoji: "🔋",
+            champ: "voiture_electrique_2_2_pers_empreinte_carbone_kgco2e",
+            description: "Voiture électrique (2 pers.)",
+        },
+        {
+            nom: "Voiture thermique",
+            emoji: "⛽",
+            champ: "voiture_thermique_2_2_pers_empreinte_carbone_kgco2e",
+            description: "Voiture essence/diesel (2 pers.)",
+        },
+    ];
+
+    function createChart() {
+        const container = document.getElementById("emissions-chart");
+        if (!container) return;
+
+        container.innerHTML = "";
+
+        // Calcul des données
+        const donnees = transports.map((t) => {
+            const valeurs = dataEmission
+                .map((d: any) => d[t.champ])
+                .filter((v: any) => v != null && !isNaN(v));
+
+            const moyenne = d3.mean(valeurs);
+            const min = d3.min(valeurs);
+            const max = d3.max(valeurs);
+            const mediane = d3.median(valeurs);
+
+            return {
+                transport: `${t.emoji} ${t.nom}`,
+                emissions: moyenne || 0,
+                min: min || 0,
+                max: max || 0,
+                mediane: mediane || 0,
+                description: t.description,
+                nbRoutes: valeurs.length,
+            };
+        });
+
+        const minEmission = d3.min(donnees, (d: any) => d.emissions) || 0;
+        const maxEmission = d3.max(donnees, (d: any) => d.emissions) || 1;
+
+        const plot = Plot.plot({
+            width: 1000,
+            marginLeft: 200,
+            marginRight: 100,
+            height: 480,
+            style: {
+                fontSize: "15px",
+                fontFamily: "system-ui, -apple-system, sans-serif",
+                background: "white",
+                borderRadius: "8px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+            },
+            x: {
+                label: "Émissions moyennes de CO₂ (kg CO₂e) →",
+                tickFormat: (d: any) =>
+                    d.toLocaleString("fr-FR", { maximumFractionDigits: 0 }),
+                grid: true,
+                nice: true,
+                labelOffset: 50,
+            },
+            y: {
+                label: null,
+                tickPadding: 10,
+            },
+            color: {
+                type: "linear",
+                domain: [minEmission, maxEmission],
+                range: ["#2ecc71", "#f1c40f", "#e74c3c"],
+                legend: true,
+                label: "Émissions de CO₂ (kg CO₂e)",
+            },
+
+            marks: [
+                Plot.barX(donnees, {
+                    y: "transport",
+                    x: "emissions",
+                    fill: "emissions",
+                    sort: { y: "-x" },
+                    rx: 8,
+                    tip: {
+                        format: {
+                            y: false,
+                            x: true,
+                            fill: false,
+                        },
+                    },
+                    title: (d: any) =>
+                        `${d.transport}\n━━━━━━━━━━━━━━━━━\n✓ Moyenne: ${d.emissions.toFixed(
+                            1,
+                        )} kg CO₂e\n✓ Médiane: ${d.mediane.toFixed(
+                            1,
+                        )} kg CO₂e\n✓ Min: ${d.min.toFixed(
+                            1,
+                        )} kg CO₂e\n✓ Max: ${d.max.toFixed(1)} kg CO₂e\n✓ ${
+                            d.description
+                        }\n✓ ${d.nbRoutes} routes analysées`,
+                }),
+
+                Plot.text(donnees, {
+                    y: "transport",
+                    x: "emissions",
+                    text: (d: any) => `${d.emissions.toFixed(0)} kg`,
+                    dx: 50,
+                    fontSize: 14,
+                    fontWeight: "700",
+                    fill: (d: any) =>
+                        d3.interpolateRgbBasis([
+                            "#2ecc71",
+                            "#f1c40f",
+                            "#e74c3c",
+                        ])(
+                            (d.emissions - minEmission) /
+                                (maxEmission - minEmission),
+                        ),
+                    textAnchor: "start",
+                }),
+            ],
+        });
+
+        container.appendChild(plot);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        createChart();
+    });
+</script>

@@ -2,12 +2,13 @@
 import Layout from "../layouts/Layout.astro";
 import SimulateurVoyage from "../components/SimulateurVoyage.astro";
 import CarteXP from "../components/carteXP.astro";
+import CarboneBarre from "../components/CarboneBarre.astro";
+import ActByRegion from "../components/ActByRegion.astro";
 ---
 
 <Layout title="Simulateur de Voyage">
-  <h1 class="text-3xl font-bold text-center mb-8">
-      Simulateur de Voyage
-  </h1>
   <SimulateurVoyage />
+  <CarboneBarre />
   <CarteXP />
+  <ActByRegion />
 </Layout>
