@@ -1,0 +1,190 @@
+---
+// src/components/SimulateurCO2.astro
+---
+
+<div class="w-full max-w-6xl mx-auto p-6">
+    <h2 class="text-3xl font-bold text-center mb-8 text-gray-900">
+        🌍 Simulateur d'impact environnemental
+    </h2>
+
+    <!-- Slider -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <label for="voyageurs-slider" class="flex justify-between text-base font-semibold mb-2 text-gray-800">
+            <span>🚶 Nombre de voyageurs passant de la voiture au train</span>
+            <span id="voyageurs-value" class="text-indigo-600 font-bold">1 000</span>
+        </label>
+        <input
+            type="range"
+            id="voyageurs-slider"
+            min="100"
+            max="10000"
+            step="100"
+            value="1000"
+            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+        />
+    </div>
+
+    <!-- Stats cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-gradient-to-br from-red-500 to-red-600 text-white p-6 rounded-xl shadow-lg">
+            <div class="text-sm font-semibold opacity-90 mb-2">CO₂ économisé</div>
+            <div id="co2-economise" class="text-4xl font-black mb-1">115 kg</div>
+            <div class="text-sm opacity-90">par trajet de 400 km</div>
+        </div>
+
+        <div class="bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-xl shadow-lg">
+            <div class="text-sm font-semibold opacity-90 mb-2">🌳 Équivalent arbres</div>
+            <div id="arbres-equiv" class="text-4xl font-black mb-1">5</div>
+            <div class="text-sm opacity-90">arbres plantés par an</div>
+        </div>
+
+        <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl shadow-lg">
+            <div class="text-sm font-semibold opacity-90 mb-2">🚗 Voitures retirées</div>
+            <div id="voitures-retirees" class="text-4xl font-black mb-1">0</div>
+            <div class="text-sm opacity-90">de la circulation (équivalent annuel)</div>
+        </div>
+    </div>
+
+    <!-- Graphique -->
+    <div class="bg-white rounded-xl shadow-lg p-6 overflow-x-auto">
+        <div id="emissions-chart" class="w-full"></div>
+    </div>
+
+    <p class="mt-4 text-sm text-gray-600 text-center italic">
+        Émissions CO₂ pour un trajet de 400 km (Paris-Lyon) • Sources: ADEME, SNCF 2025
+    </p>
+</div>
+
+<script>
+    import * as Plot from "@observablehq/plot";
+    import * as d3 from "d3";
+
+    const distanceKm = 400;
+    const emissions = {
+        avion: { valeur: 0.23, emoji: "✈️", nom: "Avion", couleur: "#e74c3c" },
+        voiture: { valeur: 0.119, emoji: "🚗", nom: "Voiture", couleur: "#e67e22" },
+        bus: { valeur: 0.068, emoji: "🚌", nom: "Bus", couleur: "#f39c12" },
+        train: { valeur: 0.004, emoji: "🚄", nom: "Train", couleur: "#27ae60" }
+    };
+
+    function updateStats(nombreVoyageurs) {
+        const emissionVoiture = 0.119;
+        const emissionTrain = 0.004;
+
+        const co2Voiture = nombreVoyageurs * emissionVoiture;
+        const co2Train = nombreVoyageurs * emissionTrain;
+        const co2Economise = co2Voiture - co2Train;
+        const co2EconomiseTonnes = co2Economise / 1000;
+
+        const arbresEquivalent = Math.round(co2EconomiseTonnes * 45);
+        const voituresRetirees = Math.round(co2EconomiseTonnes / 2.3);
+
+        // Mettre à jour les cards
+        document.getElementById("co2-economise").textContent = 
+            `${co2Economise.toFixed(0)} kg`;
+        document.getElementById("arbres-equiv").textContent = arbresEquivalent;
+        document.getElementById("voitures-retirees").textContent = voituresRetirees;
+    }
+
+    function createChart(nombreVoyageurs) {
+        const container = document.getElementById("emissions-chart");
+        if (!container) return;
+
+        container.innerHTML = "";
+
+        // Générer les données
+        const data = [];
+        for (const [mode, info] of Object.entries(emissions)) {
+            for (let n = 0; n <= nombreVoyageurs + 100; n += 100) {
+                data.push({
+                    voyageurs: n,
+                    co2: (n * distanceKm * info.valeur) / 1000,
+                    mode: `${info.emoji} ${info.nom}`,
+                    couleur: info.couleur
+                });
+            }
+        }
+
+        // Points actuels
+        const pointsActuels = data.filter(d => 
+            d.voyageurs === Math.floor(nombreVoyageurs / 100) * 100
+        );
+
+        const plot = Plot.plot({
+            width: 900,
+            height: 500,
+            marginTop: 50,
+            marginBottom: 70,
+            marginLeft: 70,
+            marginRight: 150,
+            style: {
+                fontFamily: "system-ui",
+                fontSize: "14px",
+                background: "white"
+            },
+            x: {
+                label: "Nombre de voyageurs",
+                grid: true,
+                nice: true
+            },
+            y: {
+                label: "↑ CO₂ émis (tonnes)",
+                grid: true,
+                nice: true
+            },
+            color: {
+                domain: ["✈️ Avion", "🚗 Voiture", "🚌 Bus", "🚄 Train"],
+                range: ["#e74c3c", "#e67e22", "#f39c12", "#27ae60"],
+                legend: true
+            },
+            marks: [
+                Plot.line(data, {
+                    x: "voyageurs",
+                    y: "co2",
+                    stroke: "mode",
+                    strokeWidth: 3,
+                    curve: "catmull-rom",
+                    tip: true,
+                    title: d =>
+                        `${d.mode}\n${d.voyageurs.toLocaleString("fr-FR")} voyageurs\n${d.co2.toFixed(1)} tonnes CO₂`
+                }),
+
+                Plot.dot(pointsActuels, {
+                    x: "voyageurs",
+                    y: "co2",
+                    fill: "mode",
+                    r: 6,
+                    stroke: "white",
+                    strokeWidth: 2
+                })
+            ]
+        });
+
+        container.appendChild(plot);
+    }
+
+    function update(nombreVoyageurs) {
+        // Mettre à jour l'affichage du slider
+        document.getElementById("voyageurs-value").textContent = 
+            nombreVoyageurs.toLocaleString("fr-FR");
+        
+        // Mettre à jour les stats
+        updateStats(nombreVoyageurs);
+        
+        // Mettre à jour le graphique
+        createChart(nombreVoyageurs);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const slider = document.getElementById("voyageurs-slider");
+        
+        // Init
+        update(1000);
+        
+        // Event listener
+        slider?.addEventListener("input", (e) => {
+            const value = parseInt(e.target.value);
+            update(value);
+        });
+    });
+</script>
