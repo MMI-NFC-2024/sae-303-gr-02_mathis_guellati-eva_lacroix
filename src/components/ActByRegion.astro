@@ -1,9 +1,7 @@
 ---
-// src/components/RegionsAttractives.astro
 import garesAvecActivitesData from "../assets/garesAvecActivites.json";
 import * as d3 from "d3";
 
-// Calcul des statistiques par région
 const regionStatsData = Array.from(
     d3.group(
         garesAvecActivitesData.filter((d: any) => d.region !== "Non définie"),
@@ -20,19 +18,16 @@ const regionStatsData = Array.from(
 ---
 
 <div class="w-full max-w-7xl mx-auto p-6">
-    <!-- Titre -->
     <h2 class="text-3xl font-bold text-center mb-8 text-gray-900">
         🗺️ Attractivité touristique des régions
     </h2>
 
-    <!-- Graphique -->
     <div
         class="bg-gradient-to-b from-gray-50 to-white rounded-xl shadow-lg p-6 overflow-x-auto"
     >
         <div id="regions-chart" class="w-full"></div>
     </div>
 
-    <!-- Caption -->
     <p class="mt-4 text-sm text-gray-600 text-center italic px-4">
         Attractivité touristique moyenne des régions françaises selon le nombre
         de points d'intérêt (POI) accessibles par gare.
@@ -50,7 +45,6 @@ const regionStatsData = Array.from(
 
         container.innerHTML = "";
 
-        // Calcul des statistiques par région
         const regionStats = Array.from(
             d3.group(
                 garesAvecActivitesData.filter(

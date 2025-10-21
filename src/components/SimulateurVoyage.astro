@@ -1,9 +1,7 @@
 ---
-// src/components/SimulateurVoyage.astro
 import garesAvecActivitesData from "../assets/garesAvecActivites.json";
 import departementsgeojsonData from "../assets/departementsgeojson.json";
 
-// Préparer les régions uniques
 const regionsUniques = [
     "Toutes",
     ...new Set(
@@ -15,11 +13,9 @@ const regionsUniques = [
 ---
 
 <div class="w-full max-w-7xl mx-auto font-sans">
-    <!-- Filtres interactifs -->
     <div
         class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 bg-white p-6 rounded-lg shadow-md"
     >
-        <!-- Sélection région -->
         <div>
             <label
                 for="region-select"
@@ -41,7 +37,6 @@ const regionsUniques = [
             </select>
         </div>
 
-        <!-- Seuil POI -->
         <div>
             <label
                 for="seuil-poi"
@@ -63,7 +58,6 @@ const regionsUniques = [
             />
         </div>
 
-        <!-- Nombre de gares -->
         <div>
             <label
                 for="nombre-gares"
@@ -86,7 +80,6 @@ const regionsUniques = [
         </div>
     </div>
 
-    <!-- Carte -->
     <div
         id="map-container"
         class="w-full overflow-x-auto rounded-lg shadow-lg bg-white"
@@ -103,12 +96,10 @@ const regionsUniques = [
     const garesAvecActivites = garesAvecActivitesData;
     const departementsgeojson = departementsgeojsonData;
 
-    // État des filtres
     let regionSelectionnee = "Toutes";
     let seuilPOI = 50;
     let nombreGaresMax = 10;
 
-    // Fonction de filtrage
     function filtrerGares() {
         let resultats = garesAvecActivites
             .filter((d: any) => d.region !== "Non définie")
@@ -125,7 +116,6 @@ const regionsUniques = [
             .slice(0, nombreGaresMax);
     }
 
-    // Fonction de création de carte
     function createMap() {
         const container = document.getElementById("map-container");
         if (!container) return;
@@ -134,7 +124,6 @@ const regionsUniques = [
 
         const garesFiltrees = filtrerGares();
 
-        // Si aucun résultat
         if (garesFiltrees.length === 0) {
             container.innerHTML = `
         <div class="text-center py-16 bg-gray-50 rounded-xl">
@@ -213,12 +202,9 @@ const regionsUniques = [
         container.appendChild(plot);
     }
 
-    // Event listeners
     document.addEventListener("DOMContentLoaded", () => {
-        // Initial render
         createMap();
 
-        // Région select
         const regionSelect = document.getElementById(
             "region-select",
         ) as HTMLSelectElement;
@@ -227,7 +213,6 @@ const regionsUniques = [
             createMap();
         });
 
-        // Seuil POI range
         const seuilRange = document.getElementById(
             "seuil-poi",
         ) as HTMLInputElement;
@@ -238,7 +223,6 @@ const regionsUniques = [
             createMap();
         });
 
-        // Nombre gares range
         const nombreRange = document.getElementById(
             "nombre-gares",
         ) as HTMLInputElement;
