@@ -40,13 +40,15 @@ const transports = [
     <div class="max-w-6xl w-full">
         <div class="card bg-base-100 shadow-xl">
             <div class="card-body relative pt-20">
-                <div id="comparaison-chart" class="w-full overflow-x-auto"></div>
+                <div id="comparaison-chart" class="w-full overflow-x-auto">
+                </div>
             </div>
         </div>
 
         <p class="mt-4 text-sm text-base-content/60 text-center italic">
-            Émissions moyennes de CO₂ par moyen de transport (toutes routes confondues) 
-            | Sources : Base de données comparatives des émissions de CO₂ – data.gouv.fr
+            Émissions moyennes de CO₂ par moyen de transport (toutes routes
+            confondues) | Sources : Base de données comparatives des émissions
+            de CO₂ – data.gouv.fr
         </p>
     </div>
 </div>
@@ -183,7 +185,8 @@ const transports = [
 
         // Créer la légende personnalisée en position absolute
         const legend = document.createElement("div");
-        legend.className = "absolute top-4 left-4 badge badge-lg gap-2 bg-base-100 shadow-md border border-base-300";
+        legend.className =
+            "absolute top-4 left-4 badge badge-lg gap-2 bg-base-100 shadow-md border border-base-300";
         legend.innerHTML = `
             <div class="flex items-center gap-3 p-2">
                 <span class="font-semibold text-sm">Émissions CO₂:</span>
