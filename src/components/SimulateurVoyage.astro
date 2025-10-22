@@ -108,6 +108,42 @@ const regionsUniques = [
         Total des points d’intérêt touristiques par région (filtrable par nombre
         de gares)
     </p>
+
+    <p
+    class="mt-6 text-sm text-info italic border-t border-base-300 pt-4"
+                >
+                    Sources : Base Gares & Data Tourisme – data.gouv.fr •
+                    <code>garesAvecActivites</code> et <code>garesFiltrees</code
+                    > (POI par gare et filtres dynamiques)
+                </p>
+
+    <div class="alert alert-success bg-secondary mt-14">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="stroke-current shrink-0 h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+        </svg>
+        <div>
+            <h3 class="font-bold">Comment utiliser la carte ?</h3>
+            <div class="text-sm">
+                <ul class="list-disc list-inside mt-2">
+                    <li>Sélectionnez une région pour filtrer les gares affichées.</li>
+                    <li>Ajustez le seuil de points d'intérêt pour n'afficher que les gares pertinentes.</li>
+                    <li>Modifiez le nombre de gares pour limiter les résultats visibles sur la carte.</li>
+                    <li>Survolez un marqueur pour voir les détails ; les 5 premiers sont étiquetés.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>

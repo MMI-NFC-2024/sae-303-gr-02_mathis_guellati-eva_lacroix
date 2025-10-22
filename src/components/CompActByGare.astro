@@ -84,6 +84,38 @@ import { onMount } from "astro/client";
     Nombre total de points d’intérêt touristiques accessibles par région selon
     le nombre de gares
   </p>
+
+  <p class="mt-6 text-sm text-info italic border-t border-base-300 pt-4">
+    Sources : Données croisées Data Tourisme & Base Gares – data.gouv.fr •
+    <code>regionStatsAvecNumero</code> (corrélation entre nombre de gares et POI)
+  </p>
+
+  <div class="alert alert-success bg-secondary mt-14">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="stroke-current shrink-0 h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+      ></path>
+    </svg>
+    <div>
+      <h3 class="font-bold">Comment utiliser la carte ?</h3>
+      <div class="text-sm">
+        <ul class="list-disc list-inside mt-2">
+          <li>Survolez un point pour voir le détail (nombre de gares, POI, moyenne POI/gare).</li>
+          <li>Les étiquettes numériques correspondent au numéro de la région.</li>
+          <li>Utilisez la légende et les axes pour comparer le nombre de gares et le total de POI.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -140,7 +172,7 @@ import { onMount } from "astro/client";
             stroke: "#e0e0e0",
             strokeWidth: 2,
             strokeDasharray: "8,4",
-          },
+          }
         ),
 
         Plot.dot(data, {

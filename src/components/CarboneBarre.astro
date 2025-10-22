@@ -3,194 +3,214 @@
 import dataEmission from "../assets/data_emission.json";
 
 const transports = [
-    {
-        nom: "Train",
-        emoji: "🚂",
-        champ: "train_empreinte_carbone_kgco2e",
-        description: "Train longue distance",
-    },
-    {
-        nom: "Autocar",
-        emoji: "🚌",
-        champ: "autocar_longue_distance_empreinte_carbone_kgco2e",
-        description: "Autocar longue distance",
-    },
-    {
-        nom: "Avion",
-        emoji: "✈️",
-        champ: "avion_empreinte_carbone_kgco2e",
-        description: "Vol commercial",
-    },
-    {
-        nom: "Voiture électrique",
-        emoji: "🔋",
-        champ: "voiture_electrique_2_2_pers_empreinte_carbone_kgco2e",
-        description: "Voiture électrique (2 pers.)",
-    },
-    {
-        nom: "Voiture thermique",
-        emoji: "⛽",
-        champ: "voiture_thermique_2_2_pers_empreinte_carbone_kgco2e",
-        description: "Voiture essence/diesel (2 pers.)",
-    },
+  {
+    nom: "Train",
+    emoji: "🚂",
+    champ: "train_empreinte_carbone_kgco2e",
+    description: "Train longue distance",
+  },
+  {
+    nom: "Autocar",
+    emoji: "🚌",
+    champ: "autocar_longue_distance_empreinte_carbone_kgco2e",
+    description: "Autocar longue distance",
+  },
+  {
+    nom: "Avion",
+    emoji: "✈️",
+    champ: "avion_empreinte_carbone_kgco2e",
+    description: "Vol commercial",
+  },
+  {
+    nom: "Voiture électrique",
+    emoji: "🔋",
+    champ: "voiture_electrique_2_2_pers_empreinte_carbone_kgco2e",
+    description: "Voiture électrique (2 pers.)",
+  },
+  {
+    nom: "Voiture thermique",
+    emoji: "⛽",
+    champ: "voiture_thermique_2_2_pers_empreinte_carbone_kgco2e",
+    description: "Voiture essence/diesel (2 pers.)",
+  },
 ];
 ---
 
-<div class="w-full flex justify-center items-center">
-    <div class="max-w-6xl w-full">
-        <div class="card bg-base-100 shadow-xl">
-            <div class="card-body relative pt-20">
-                <div id="comparaison-chart" class="w-full overflow-x-auto">
-                </div>
-            </div>
-        </div>
+<div class="w-full max-w-7xl mx-auto">
+  <div class="card-body relative pt-20 px-0">
+    <div id="comparaison-chart" class="w-full"></div>
+  </div>
+</div>
 
-        <p class="mt-4 text-sm text-base-content/60 text-center italic">
-            Émissions moyennes de CO₂ par moyen de transport (toutes routes
-            confondues) | Sources : Base de données comparatives des émissions
-            de CO₂ – data.gouv.fr
-        </p>
-    </div>
+<p class="mt-8 mb-4 text-sm text-info italic">
+  Émissions moyennes de CO₂ par moyen de transport (toutes routes confondues) |
+  Sources : Base de données comparatives des émissions de CO₂ – data.gouv.fr
+</p>
+
+<p class="mt-6 text-sm text-info italic border-t border-base-300 pt-4">
+  Sources : Base de données comparatives des émissions de CO₂ – data.gouv.fr
+</p>
+
+<div class="alert alert-success bg-secondary mt-14">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="stroke-current shrink-0 h-6 w-6"
+    fill="none"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+  </svg>
+  <div>
+    <h3 class="font-bold">Comment utiliser la carte ?</h3>
+    <ul class="mt-2 ml-4 list-disc text-sm">
+      <li>Pannez et zoomez pour explorer la zone d’intérêt.</li>
+      <li>Cliquez sur un marqueur pour voir les détails d’émissions liés.</li>
+      <li>
+        Utilisez les contrôles de filtre pour sélectionner le mode de transport
+        affiché.
+      </li>
+    </ul>
+  </div>
 </div>
 
 <script>
-    import * as Plot from "@observablehq/plot";
-    import * as d3 from "d3";
-    import dataEmission from "../assets/data_emission.json";
+  import * as Plot from "@observablehq/plot";
+  import * as d3 from "d3";
+  import dataEmission from "../assets/data_emission.json";
 
-    const transportsStatic = [
-        {
-            nom: "Train",
-            emoji: "🚂",
-            champ: "train_empreinte_carbone_kgco2e",
-            description: "Train longue distance",
-        },
-        {
-            nom: "Autocar",
-            emoji: "🚌",
-            champ: "autocar_longue_distance_empreinte_carbone_kgco2e",
-            description: "Autocar longue distance",
-        },
-        {
-            nom: "Avion",
-            emoji: "✈️",
-            champ: "avion_empreinte_carbone_kgco2e",
-            description: "Vol commercial",
-        },
-        {
-            nom: "Voiture électrique",
-            emoji: "🔋",
-            champ: "voiture_electrique_2_2_pers_empreinte_carbone_kgco2e",
-            description: "Voiture électrique (2 pers.)",
-        },
-        {
-            nom: "Voiture thermique",
-            emoji: "⛽",
-            champ: "voiture_thermique_2_2_pers_empreinte_carbone_kgco2e",
-            description: "Voiture essence/diesel (2 pers.)",
-        },
-    ];
+  const transportsStatic = [
+    {
+      nom: "Train",
+      emoji: "🚂",
+      champ: "train_empreinte_carbone_kgco2e",
+      description: "Train longue distance",
+    },
+    {
+      nom: "Autocar",
+      emoji: "🚌",
+      champ: "autocar_longue_distance_empreinte_carbone_kgco2e",
+      description: "Autocar longue distance",
+    },
+    {
+      nom: "Avion",
+      emoji: "✈️",
+      champ: "avion_empreinte_carbone_kgco2e",
+      description: "Vol commercial",
+    },
+    {
+      nom: "Voiture électrique",
+      emoji: "🔋",
+      champ: "voiture_electrique_2_2_pers_empreinte_carbone_kgco2e",
+      description: "Voiture électrique (2 pers.)",
+    },
+    {
+      nom: "Voiture thermique",
+      emoji: "⛽",
+      champ: "voiture_thermique_2_2_pers_empreinte_carbone_kgco2e",
+      description: "Voiture essence/diesel (2 pers.)",
+    },
+  ];
 
-    function createComparaisonChart() {
-        const container = document.getElementById("comparaison-chart");
-        if (!container) return;
+  function createComparaisonChart() {
+    const container = document.getElementById("comparaison-chart");
+    if (!container) return;
 
-        container.innerHTML = "";
+    container.innerHTML = "";
 
-        const donnees = transportsStatic.map((t) => {
-            const valeurs = dataEmission
-                .map((d) => d[t.champ])
-                .filter((v) => v != null && !isNaN(v));
+    const donnees = transportsStatic.map((t) => {
+      const valeurs = dataEmission
+        .map((d) => d[t.champ])
+        .filter((v) => v != null && !isNaN(v));
 
-            const moyenne = d3.mean(valeurs);
-            const min = d3.min(valeurs);
-            const max = d3.max(valeurs);
-            const mediane = d3.median(valeurs);
+      const moyenne = d3.mean(valeurs);
+      const min = d3.min(valeurs);
+      const max = d3.max(valeurs);
+      const mediane = d3.median(valeurs);
 
-            return {
-                transport: `${t.emoji} ${t.nom}`,
-                emissions: moyenne || 0,
-                min: min || 0,
-                max: max || 0,
-                mediane: mediane || 0,
-                description: t.description,
-                nbRoutes: valeurs.length,
-            };
-        });
+      return {
+        transport: `${t.emoji} ${t.nom}`,
+        emissions: moyenne || 0,
+        min: min || 0,
+        max: max || 0,
+        mediane: mediane || 0,
+        description: t.description,
+        nbRoutes: valeurs.length,
+      };
+    });
 
-        const minEmission = d3.min(donnees, (d) => d.emissions) || 0;
-        const maxEmission = d3.max(donnees, (d) => d.emissions) || 1;
+    const minEmission = d3.min(donnees, (d) => d.emissions) || 0;
+    const maxEmission = d3.max(donnees, (d) => d.emissions) || 1;
 
-        const plot = Plot.plot({
-            width: 1000,
-            marginLeft: 200,
-            marginRight: 100,
-            marginTop: 60,
-            height: 480,
-            style: {
-                fontSize: "15px",
-                fontFamily: "system-ui, -apple-system, sans-serif",
-                background: "white",
-                borderRadius: "8px",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-            },
-            x: {
-                label: "Émissions moyennes de CO₂ (kg CO₂e) →",
-                tickFormat: (d) =>
-                    d.toLocaleString("fr-FR", { maximumFractionDigits: 0 }),
-                grid: true,
-                nice: true,
-                labelOffset: 50,
-            },
-            y: { label: null, tickPadding: 10 },
-            color: {
-                type: "linear",
-                domain: [minEmission, maxEmission],
-                range: ["#2ecc71", "#f1c40f", "#e74c3c"],
-                legend: false,
-            },
-            marks: [
-                Plot.barX(donnees, {
-                    y: "transport",
-                    x: "emissions",
-                    fill: "emissions",
-                    sort: { y: "-x" },
-                    rx: 8,
-                    tip: { format: { y: false, x: true, fill: false } },
-                    title: (d) =>
-                        `${d.transport}\n━━━━━━━━━━━━━━━━━\n✓ Moyenne: ${d.emissions.toFixed(1)} kg CO₂e\n✓ Médiane: ${d.mediane.toFixed(1)} kg CO₂e\n✓ Min: ${d.min.toFixed(1)} kg CO₂e\n✓ Max: ${d.max.toFixed(1)} kg CO₂e\n✓ ${d.description}\n✓ ${d.nbRoutes} routes analysées`,
-                }),
-                Plot.text(donnees, {
-                    y: "transport",
-                    x: "emissions",
-                    text: (d) => `${d.emissions.toFixed(0)} kg`,
-                    dx: 50,
-                    fontSize: 14,
-                    fontWeight: "700",
-                    fill: (d) =>
-                        d3.interpolateRgbBasis([
-                            "#2ecc71",
-                            "#f1c40f",
-                            "#e74c3c",
-                        ])(
-                            (d.emissions - minEmission) /
-                                (maxEmission - minEmission),
-                        ),
-                    textAnchor: "start",
-                }),
-            ],
-        });
+    const plot = Plot.plot({
+      width: 1000,
+      marginLeft: 200,
+      marginRight: 100,
+      marginTop: 60,
+      height: 480,
+      style: {
+        fontSize: "15px",
+        fontFamily: "system-ui, -apple-system, sans-serif",
+        background: "white",
+        borderRadius: "8px",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+      },
+      x: {
+        label: "Émissions moyennes de CO₂ (kg CO₂e) →",
+        tickFormat: (d) =>
+          d.toLocaleString("fr-FR", { maximumFractionDigits: 0 }),
+        grid: true,
+        nice: true,
+        labelOffset: 50,
+      },
+      y: { label: null, tickPadding: 10 },
+      color: {
+        type: "linear",
+        domain: [minEmission, maxEmission],
+        range: ["#2ecc71", "#f1c40f", "#e74c3c"],
+        legend: false,
+      },
+      marks: [
+        Plot.barX(donnees, {
+          y: "transport",
+          x: "emissions",
+          fill: "emissions",
+          sort: { y: "-x" },
+          rx: 8,
+          tip: { format: { y: false, x: true, fill: false } },
+          title: (d) =>
+            `${d.transport}\n━━━━━━━━━━━━━━━━━\n✓ Moyenne: ${d.emissions.toFixed(1)} kg CO₂e\n✓ Médiane: ${d.mediane.toFixed(1)} kg CO₂e\n✓ Min: ${d.min.toFixed(1)} kg CO₂e\n✓ Max: ${d.max.toFixed(1)} kg CO₂e\n✓ ${d.description}\n✓ ${d.nbRoutes} routes analysées`,
+        }),
+        Plot.text(donnees, {
+          y: "transport",
+          x: "emissions",
+          text: (d) => `${d.emissions.toFixed(0)} kg`,
+          dx: 50,
+          fontSize: 14,
+          fontWeight: "700",
+          fill: (d) =>
+            d3.interpolateRgbBasis(["#2ecc71", "#f1c40f", "#e74c3c"])(
+              (d.emissions - minEmission) / (maxEmission - minEmission)
+            ),
+          textAnchor: "start",
+        }),
+      ],
+    });
 
-        container.appendChild(plot);
+    container.appendChild(plot);
 
-        // Créer la légende personnalisée en position absolute
-        const legend = document.createElement("div");
-        legend.className =
-            "absolute top-4 left-4 badge badge-lg gap-2 bg-base-100 shadow-md border border-base-300";
-        legend.innerHTML = `
-            <div class="flex items-center gap-3 p-2">
+    // Créer la légende personnalisée en position absolute
+    const legend = document.createElement("div");
+    legend.className =
+      "absolute top-4 left-4 badge badge-lg gap-2 bg-base-100 shadow-md border border-base-300";
+    legend.innerHTML = `
+            <div class="flex items-center gap-3 p-0 py-2">
                 <span class="font-semibold text-sm">Émissions CO₂:</span>
-                <div class="flex items-center gap-1">
+                <div class="flex  gap-1">
                     <div class="w-3 h-3 rounded-full bg-[#2ecc71]"></div>
                     <span class="text-xs">Faible</span>
                 </div>
@@ -204,10 +224,10 @@ const transports = [
                 </div>
             </div>
         `;
-        container.appendChild(legend);
-    }
+    container.appendChild(legend);
+  }
 
-    document.addEventListener("DOMContentLoaded", () => {
-        createComparaisonChart();
-    });
+  document.addEventListener("DOMContentLoaded", () => {
+    createComparaisonChart();
+  });
 </script>

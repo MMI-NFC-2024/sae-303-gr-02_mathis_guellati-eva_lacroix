@@ -3,150 +3,181 @@ import garesAvecActivitesData from "../assets/garesAvecActivites.json";
 import departementsgeojsonData from "../assets/departementsgeojson.json";
 
 const garesSorted = garesAvecActivitesData
-    .filter((d) => d.nombrePOI != null)
-    .sort((a, b) => b.nombrePOI - a.nombrePOI);
+  .filter((d) => d.nombrePOI != null)
+  .sort((a, b) => b.nombrePOI - a.nombrePOI);
 ---
 
 <div class="w-full max-w-7xl mx-auto">
-    <div class="form-control w-full mb-6">
-        <label class="label">
-            <span class="label-text font-semibold">Sélectionner une gare</span>
-        </label>
-        <input
-            type="text"
-            id="gare-search"
-            class="input input-bordered w-full"
-            placeholder="🔍 Rechercher une gare..."
-            list="gares-list"
-        />
-        <datalist id="gares-list">
-            {garesSorted.map((gare) => <option value={gare.nom} />)}
-        </datalist>
-    </div>
+  <div class="form-control w-full mb-6">
+    <label class="label">
+      <span class="label-text font-semibold">Sélectionner une gare</span>
+    </label>
+    <input
+      type="text"
+      id="gare-search"
+      class="input input-bordered w-full"
+      placeholder="🔍 Rechercher une gare..."
+      list="gares-list"
+    />
+    <datalist id="gares-list">
+      {garesSorted.map((gare) => <option value={gare.nom} />)}
+    </datalist>
+  </div>
 
-    <div class="card bg-base-100 shadow-xl mb-4">
-        <div class="card-body p-4">
-            <div id="map-plot" class="w-full flex justify-center items-center">
-            </div>
-        </div>
+  <div
+    class="bg-gradient-to-b from-gray-50 to-white rounded-xl shadow-lg p-6 overflow-x-auto"
+  >
+    <div class="card-body p-4">
+      <div id="map-plot" class="w-full flex justify-center items-center"></div>
     </div>
+  </div>
 
-    <p class="text-sm text-base-content/60 text-center italic">
-        Nombre de points d'intérêt touristiques accessibles par gare (rayon 10
-        km). | Sources : Base Gares SNCF & Open Data Tourisme
-    </p>
+  <p class="mt-8 mb-4 text-sm text-info italic">
+    Nombre de points d'intérêt touristiques accessibles par gare (rayon 10 km).
+    | Sources : Base Gares SNCF & Open Data Tourisme
+  </p>
+
+  <p class="mt-6 text-sm text-info italic border-t border-base-300 pt-4">
+    Sources : Base Gares SNCF & Open Data Tourisme – data.gouv.fr
+  </p>
+
+  <div class="alert alert-success bg-secondary mt-14">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="stroke-current shrink-0 h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>
+    <div>
+      <h3 class="font-bold">Comment utiliser la carte ?</h3>
+      <div class="text-sm">
+        <ul class="list-disc list-inside mt-2">
+          <li>
+            Utilisez la barre de recherche pour trouver une gare spécifique
+          </li>
+          <li>
+            Survolez les points pour voir les détails (nom, région, nombre de
+            POI)
+          </li>
+          <li>
+            La taille et la couleur des points indiquent l'intensité touristique
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-    import * as Plot from "@observablehq/plot";
-    import * as d3 from "d3";
-    import garesAvecActivitesData from "../assets/garesAvecActivites.json";
-    import departementsgeojsonData from "../assets/departementsgeojson.json";
+  import * as Plot from "@observablehq/plot";
+  import * as d3 from "d3";
+  import garesAvecActivitesData from "../assets/garesAvecActivites.json";
+  import departementsgeojsonData from "../assets/departementsgeojson.json";
 
-    const garesAvecActivites = garesAvecActivitesData
-        .filter((d) => d.nombrePOI != null)
-        .sort((a, b) => b.nombrePOI - a.nombrePOI);
+  const garesAvecActivites = garesAvecActivitesData
+    .filter((d) => d.nombrePOI != null)
+    .sort((a, b) => b.nombrePOI - a.nombrePOI);
 
-    const departementsgeojson = departementsgeojsonData;
+  const departementsgeojson = departementsgeojsonData;
 
-    let selectedGare = null;
+  let selectedGare = null;
 
-    function createMap(selectedGare) {
-        const container = document.getElementById("map-plot");
-        if (!container) return;
+  function createMap(selectedGare) {
+    const container = document.getElementById("map-plot");
+    if (!container) return;
 
-        container.innerHTML = "";
+    container.innerHTML = "";
 
-        const plot = Plot.plot({
-            width: 1200,
-            height: 700,
-            marginLeft: 50,
-            marginRight: 50,
-            marginTop: 50,
-            marginBottom: 50,
+    const plot = Plot.plot({
+      width: 1200,
+      height: 700,
+      marginLeft: 50,
+      marginRight: 50,
+      marginTop: 50,
+      marginBottom: 50,
 
-            projection: {
-                type: "mercator",
-                domain: departementsgeojson,
-            },
+      projection: {
+        type: "mercator",
+        domain: departementsgeojson,
+      },
 
-            color: {
-                legend: true,
-                scheme: "Turbo",
-                domain: [0, d3.max(garesAvecActivites, (d) => d.nombrePOI)],
-                label: "Points d'intérêt",
-            },
+      color: {
+        legend: true,
+        scheme: "Turbo",
+        domain: [0, d3.max(garesAvecActivites, (d) => d.nombrePOI)],
+        label: "Points d'intérêt",
+      },
 
-            marks: [
-                Plot.geo(departementsgeojson, {
-                    fill: "#fafafa",
-                    stroke: "#ddd",
-                }),
+      marks: [
+        Plot.geo(departementsgeojson, {
+          fill: "#fafafa",
+          stroke: "#ddd",
+        }),
 
-                Plot.dot(garesAvecActivites, {
-                    x: "longitude",
-                    y: "latitude",
-                    r: (d) => Math.sqrt(d.nombrePOI) * 2.5,
-                    fill: "nombrePOI",
-                    stroke: "white",
-                    strokeWidth: 1.5,
-                    opacity: (d) =>
-                        !selectedGare
-                            ? 0.95
-                            : d.nom === selectedGare.nom
-                              ? 1
-                              : 0.4,
-                    tip: true,
-                    channels: {
-                        Gare: "nom",
-                        Région: "region",
-                        Activités: "nombrePOI",
-                    },
-                }),
+        Plot.dot(garesAvecActivites, {
+          x: "longitude",
+          y: "latitude",
+          r: (d) => Math.sqrt(d.nombrePOI) * 2.5,
+          fill: "nombrePOI",
+          stroke: "white",
+          strokeWidth: 1.5,
+          opacity: (d) =>
+            !selectedGare ? 0.95 : d.nom === selectedGare.nom ? 1 : 0.4,
+          tip: true,
+          channels: {
+            Gare: "nom",
+            Région: "region",
+            Activités: "nombrePOI",
+          },
+        }),
 
-                selectedGare &&
-                    Plot.text([selectedGare], {
-                        x: "longitude",
-                        y: "latitude",
-                        text: (d) => `${d.nom}\n${d.nombrePOI} activités`,
-                        dy: -15,
-                        fontSize: 12,
-                        fontWeight: "bold",
-                        fill: "#dc2626",
-                        stroke: "white",
-                        strokeWidth: 4,
-                    }),
-            ],
-        });
+        selectedGare &&
+          Plot.text([selectedGare], {
+            x: "longitude",
+            y: "latitude",
+            text: (d) => `${d.nom}\n${d.nombrePOI} activités`,
+            dy: -15,
+            fontSize: 12,
+            fontWeight: "bold",
+            fill: "#dc2626",
+            stroke: "white",
+            strokeWidth: 4,
+          }),
+      ],
+    });
 
-        container.appendChild(plot);
+    container.appendChild(plot);
 
-        const legend = plot.querySelector('[aria-label="color legend"]');
-        if (legend) {
-            legend.style.position = "absolute";
-            legend.style.top = "20px";
-            legend.style.left = "20px";
-            legend.style.right = "auto";
-        }
-
-        plot.style.position = "relative";
-        plot.style.margin = "0 auto";
-        plot.style.display = "block";
+    const legend = plot.querySelector('[aria-label="color legend"]');
+    if (legend) {
+      legend.style.position = "absolute";
+      legend.style.top = "20px";
+      legend.style.left = "20px";
+      legend.style.right = "auto";
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-        createMap(null);
+    plot.style.position = "relative";
+    plot.style.margin = "0 auto";
+    plot.style.display = "block";
+  }
 
-        const searchInput = document.getElementById("gare-search");
-        if (searchInput) {
-            searchInput.addEventListener("input", (e) => {
-                const searchValue = e.target.value;
-                const found = garesAvecActivites.find(
-                    (g) => g.nom === searchValue,
-                );
-                selectedGare = found || null;
-                createMap(selectedGare);
-            });
-        }
-    });
+  document.addEventListener("DOMContentLoaded", () => {
+    createMap(null);
+
+    const searchInput = document.getElementById("gare-search");
+    if (searchInput) {
+      searchInput.addEventListener("input", (e) => {
+        const searchValue = e.target.value;
+        const found = garesAvecActivites.find((g) => g.nom === searchValue);
+        selectedGare = found || null;
+        createMap(selectedGare);
+      });
+    }
+  });
 </script>

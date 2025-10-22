@@ -4,161 +4,136 @@ import CarboneBarre from "../components/CarboneBarre.astro";
 import TransportPollutionComp from "../components/TransportPollutionComp.astro";
 
 const transportData = [
-    { mode: "Train", avg: 3.5, min: 2, max: 5, color: "#2ecc71" },
-    { mode: "Bus", avg: 68, min: 50, max: 85, color: "#f39c12" },
-    { mode: "Voiture", avg: 170, min: 120, max: 220, color: "#e67e22" },
-    { mode: "Avion", avg: 175, min: 150, max: 250, color: "#e74c3c" },
+  { mode: "Train", avg: 3.5, min: 2, max: 5, color: "#2ecc71" },
+  { mode: "Bus", avg: 68, min: 50, max: 85, color: "#f39c12" },
+  { mode: "Voiture", avg: 170, min: 120, max: 220, color: "#e67e22" },
+  { mode: "Avion", avg: 175, min: 150, max: 250, color: "#e74c3c" },
 ];
 ---
 
 <Layout title="Durabilité - Impact carbone">
-    <section class="py-12 px-6 lg:px-20 bg-base-100 text-base-content">
-        <div class="container mx-auto max-w-8xl text-center">
-            <h1
-                class="text-4xl lg:text-6xl font-extrabold mb-8 text-base-content"
-            >
-                Impact carbone du train vs autres transports
-            </h1>
+  <section class="py-12 px-6 lg:px-20 bg-base-100 text-base-content">
+    <div class="container mx-auto max-w-8xl text-center">
+      <h1 class="text-4xl lg:text-6xl font-extrabold mb-8 text-base-content">
+        Impact carbone du train vs autres transports
+      </h1>
 
-            <div
-                class="inline-block bg-success/10 border border-success/30 px-6 py-3 rounded-2xl mb-8"
-            >
-                <p
-                    class="text-xl lg:text-2xl font-semibold text-info-content italic"
-                >
-                    « Le train : le choix écologique pour vos déplacements »
-                </p>
-            </div>
+      <div
+        class="inline-block bg-success/10 border border-success/30 px-6 py-3 rounded-2xl mb-8"
+      >
+        <p class="text-xl lg:text-2xl font-semibold text-info-content italic">
+          « Le train : le choix écologique pour vos déplacements »
+        </p>
+      </div>
 
-            <p class="text-xl lg:text-2xl leading-relaxed">
-                Grâce aux données d'émissions carbone, découvrez pourquoi le
-                <span class="font-semibold text-success"
-                    >train est le mode de transport le plus durable</span
-                >.
-                <br /> Chaque trajet compte pour préserver notre planète.
-            </p>
+      <p class="text-xl lg:text-2xl leading-relaxed">
+        Grâce aux données d'émissions carbone, découvrez pourquoi le
+        <span class="font-semibold text-success"
+          >train est le mode de transport le plus durable</span
+        >.
+        <br /> Chaque trajet compte pour préserver notre planète.
+      </p>
 
-            <div class="mt-14 flex flex-wrap justify-center gap-4 text-lg">
-                <a
-                    href="#comparaison"
-                    class="inline-flex items-center gap-3 px-4 py-2 rounded-lg bg-success/10 border border-success/30 text-success font-medium shadow-sm transition-transform hover:scale-105"
-                >
-                    <span class="text-xl lg:text-2xl">📊</span>
-                    <span>Comparaison CO₂</span>
-                </a>
-
-                <a
-                    href="#simulateur"
-                    class="inline-flex items-center gap-3 px-4 py-2 rounded-lg bg-info/10 border border-info/30 text-info font-medium shadow-sm transition-transform hover:scale-105"
-                >
-                    <span class="text-xl lg:text-2xl">💚</span>
-                    <span>Calculateur d'économies</span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <section
-        id="comparaison"
-        class="bg-success/10 py-10 border-t border-success/30"
-    >
-        <div class="container mx-auto px-6 lg:px-20">
-            <div class="mb-12 text-center">
-                <h2
-                    class="text-2xl lg:text-4xl font-bold text-base-content mb-6"
-                >
-                    📊 Comparaison des émissions CO₂
-                </h2>
-                <p class="text-lg lg:text-xl mx-auto">
-                    Émissions moyennes de CO₂ par passager pour un trajet
-                    Paris-Lyon (environ 400 km)
-                </p>
-            </div>
-
-            <div
-                class="bg-base-100 rounded-3xl shadow-lg p-6 lg:p-10 hover:shadow-xl transition-all duration-300"
-            >
-                <CarboneBarre data={transportData} />
-
-                <p
-                    class="mt-6 text-sm text-base-content/60 italic border-t border-base-300 pt-4"
-                >
-                    Sources : Base de données comparatives des émissions de CO₂
-                    – data.gouv.fr
-                </p>
-            </div>
-
-            <div class="alert alert-success shadow-lg mt-8">
-                <div>
-                    <h3 class="font-bold text-lg mb-2">🌱 Le saviez-vous ?</h3>
-                    <p>
-                        <strong
-                            >Le train émet jusqu'à 50 fois moins de CO₂ que
-                            l'avion</strong
-                        >
-                        pour un trajet équivalent. En choisissant le train, vous
-                        contribuez activement à la réduction de l'empreinte carbone
-                        du secteur des transports.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="simulateur" class="bg-info/10 py-24 border-t border-info/30">
-        <div class="container mx-auto px-6 lg:px-20 max-w-7xl">
-            <div class="mb-12 text-center">
-                <h2
-                    class="text-3xl lg:text-5xl font-bold text-base-content mb-6"
-                >
-                    💚 Calculez les économies CO₂
-                </h2>
-                <p class="text-lg lg:text-xl mx-auto">
-                    Simulez l'impact écologique si des voyageurs passent de la
-                    voiture/avion au train
-                </p>
-            </div>
-
-            <div
-                class="bg-base-100 rounded-3xl shadow-lg p-6 lg:p-10 hover:shadow-xl transition-all duration-300"
-            >
-                <TransportPollutionComp />
-
-                <p
-                    class="mt-6 text-sm text-base-content/60 italic border-t border-base-300 pt-4"
-                >
-                    Sources : ADEME, SNCF 2025 • Émissions CO₂ pour un trajet de
-                    400 km (Paris-Lyon)
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section
-        class="relative py-24 bg-gradient-to-r from-success to-info/60 text-white"
-    >
-        <div
-            class="container mx-auto px-6 lg:px-20 flex flex-col items-center text-center"
+      <div class="mt-14 flex flex-wrap justify-center gap-4 text-lg">
+        <a
+          href="#comparaison"
+          class="inline-flex items-center gap-3 px-4 py-2 rounded-lg bg-success/10 border border-success/30 text-success font-medium shadow-sm transition-transform hover:scale-105"
         >
-            <div
-                class="max-w-3xl backdrop-blur-lg bg-white/10 rounded-3xl p-10 shadow-2xl border border-white/20"
+          <span class="text-xl lg:text-2xl">📊</span>
+          <span>Comparaison CO₂</span>
+        </a>
+
+        <a
+          href="#simulateur"
+          class="inline-flex items-center gap-3 px-4 py-2 rounded-lg bg-info/10 border border-info/30 text-info font-medium shadow-sm transition-transform hover:scale-105"
+        >
+          <span class="text-xl lg:text-2xl">💚</span>
+          <span>Calculateur d'économies</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section
+    id="comparaison"
+    class="bg-success/10 py-10 border-t border-success/30"
+  >
+    <div class="container mx-auto px-6 lg:px-20">
+      <div class="mb-12 text-center">
+        <h2 class="text-2xl lg:text-4xl font-bold text-base-content mb-6">
+          📊 Comparaison des émissions CO₂
+        </h2>
+        <p class="text-lg lg:text-xl mx-auto">
+          Émissions moyennes de CO₂ par passager pour un trajet Paris-Lyon
+          (environ 400 km)
+        </p>
+      </div>
+
+      <div
+        class="bg-base-100 rounded-3xl shadow-lg p-6 lg:p-10 hover:shadow-xl transition-all duration-300"
+      >
+        <CarboneBarre data={transportData} />
+      </div>
+
+      <div class="alert alert-success shadow-lg mt-8">
+        <div>
+          <h3 class="font-bold text-lg mb-2">🌱 Le saviez-vous ?</h3>
+          <p>
+            <strong
+              >Le train émet jusqu'à 50 fois moins de CO₂ que l'avion</strong
             >
-                <h2 class="text-4xl font-bold mb-6">
-                    ✨ Agissez pour le climat
-                </h2>
-                <p class="text-lg text-white/90 leading-relaxed">
-                    Chaque trajet en train compte ! En privilégiant le rail,
-                    vous faites un choix concret pour l'environnement. Le train
-                    reste le mode de transport le plus écologique pour les
-                    déplacements longue distance en France.
-                </p>
-                <a
-                    href="/conclusion"
-                    class="mt-8 btn btn-lg btn-neutral shadow-lg hover:shadow-xl transition-all"
-                >
-                    Découvrir la conclusion →
-                </a>
-            </div>
+            pour un trajet équivalent. En choisissant le train, vous contribuez activement
+            à la réduction de l'empreinte carbone du secteur des transports.
+          </p>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
+
+  <section id="simulateur" class="bg-info/10 py-24 border-t border-info/30">
+    <div class="container mx-auto px-6 lg:px-20 max-w-7xl">
+      <div class="mb-12 text-center">
+        <h2 class="text-2xl lg:text-4xl font-bold text-base-content mb-6">
+          💚 Calculez les économies CO₂
+        </h2>
+        <p class="text-lg lg:text-xl mx-auto">
+          Simulez l'impact écologique si des voyageurs passent de la
+          voiture/avion au train
+        </p>
+      </div>
+
+      <div
+        class="bg-base-100 rounded-3xl shadow-lg p-6 lg:p-10 hover:shadow-xl transition-all duration-300"
+      >
+        <TransportPollutionComp />
+        
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="relative py-24 bg-gradient-to-r from-success to-info/60 text-white"
+  >
+    <div
+      class="container mx-auto px-6 lg:px-20 flex flex-col items-center text-center"
+    >
+      <div
+        class="max-w-3xl backdrop-blur-lg bg-white/10 rounded-3xl p-10 shadow-2xl border border-white/20"
+      >
+        <h2 class="text-4xl font-bold mb-6">✨ Agissez pour le climat</h2>
+        <p class="text-lg text-white/90 leading-relaxed">
+          Chaque trajet en train compte ! En privilégiant le rail, vous faites
+          un choix concret pour l'environnement. Le train reste le mode de
+          transport le plus écologique pour les déplacements longue distance en
+          France.
+        </p>
+        <a
+          href="/conclusion"
+          class="mt-8 btn btn-lg btn-neutral shadow-lg hover:shadow-xl transition-all"
+        >
+          Découvrir la conclusion →
+        </a>
+      </div>
+    </div>
+  </section>
 </Layout>
