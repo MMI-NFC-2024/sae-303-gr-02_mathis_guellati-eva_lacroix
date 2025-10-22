@@ -1,1 +1,40 @@
 @import "tailwindcss";
+
+@plugin "daisyui" {
+    themes: all
+}
+
+@plugin "daisyui/theme" {
+    name: "train";
+    default: true;
+    prefersdark: false;
+    color-scheme: "light";
+    --color-base-100: oklch(97% 0.013 236.62);
+    --color-base-200: oklch(0.950 0.025 236.8);
+    --color-base-300: oklch(0.900 0.038 230.9);
+    --color-base-content: #002f4d;
+    --color-primary: oklch(0.764 0.062 239.1);
+    --color-primary-content: oklch(0% 0 0);
+    --color-secondary: oklch(0.790 0.159 151.7);
+    --color-secondary-content: oklch(0% 0 0);
+    --color-accent: #00c6e0;
+    --color-accent-content: oklch(0% 0 0);
+    --color-neutral: oklch(0.500 0.053 240.0);
+    --color-neutral-content: oklch(100% 0 0);
+    --color-info: oklch(70% 0.05 220);
+    --color-info-content: oklch(0% 0 0);
+    --color-success: oklch(69% 0.17 162.48);
+    --color-success-content: oklch(26% 0.051 172.552);
+    --color-warning: oklch(82% 0.189 84.429);
+    --color-warning-content: oklch(27% 0.077 45.635);
+    --color-error: oklch(71% 0.194 13.428);
+    --color-error-content: oklch(27% 0.105 12.094);
+    --radius-selector: 0.5rem;
+    --radius-field: 0.5rem;
+    --radius-box: 1rem;
+    --size-selector: 0.3125rem;
+    --size-field: 0.3125rem;
+    --border: 1.5px;
+    --depth: 1;
+    --noise: 0;
+}

@@ -1,20 +1,139 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import SimulateurVoyage from "../components/SimulateurVoyage.astro";
-import CarteXP from "../components/CarteXP.astro";
-import CarboneBarre from "../components/CarboneBarre.astro";
-import ActByRegion from "../components/ActByRegion.astro";
-import TransportPollutionComp from "../components/TransportPollutionComp.astro";
-import RegionPlot from "../components/CompActByGare.astro";
-
-
+import ImgHero from "../assets/img/ImgHero.jpg?url";
+import ImgAttractivite from "../assets/img/ImgAttractiviteAccueil.jpg?url";
+import ImgDurabilite from "../assets/img/ImgDurabiliteAccueil.jpg?url";
 ---
 
-<Layout title="Simulateur de Voyage">
-  <!-- <SimulateurVoyage />
-  <CarboneBarre />
-  <CarteXP />
-  <ActByRegion /> -->
-  <!-- <TransportPollutionComp /> -->
-  <RegionPlot />
+<Layout>
+  <section class="relative bg-base-100">
+    <div
+      class="container mx-auto px-6 lg:px-20 py-20 flex flex-col lg:flex-row items-center gap-12"
+    >
+      <div class="flex-1 flex flex-col gap-6">
+        <h1
+          class="text-4xl lg:text-5xl font-bold text-primary-content leading-tight"
+        >
+          Et si le train était la plus belle façon d’explorer la France ?
+        </h1>
+
+        <p class="text-lg lg:text-xl text-base-content max-w-xl">
+          Bien plus qu’un simple moyen de transport, le train révèle une France
+          riche et surprenante. À travers des
+          <a
+            href="https://defis.data.gouv.fr/defis/tourisme-en-train"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-accent hover:underline hover:text-neutral"
+            >données ouvertes</a
+          > sur le réseau ferroviaire et le tourisme, nous explorons comment le rail
+          devient la porte d’entrée vers des expériences uniques, accessibles et
+          durables.
+        </p>
+
+        <p class="text-base lg:text-lg text-base-content max-w-lg">
+          Ce projet combine data visualisation et storytelling pour montrer
+          concrètement où voyager en train rime avec découvertes et plaisir.
+          Nous avons analysé les gares françaises, les points d’intérêt
+          touristiques et l’impact écologique des différents modes de transport.
+        </p>
+
+        <a href="/accessibilite" class="btn btn-primary btn-lg w-max mt-4">
+          Découvrir les destinations accessibles
+        </a>
+      </div>
+
+      <div class="flex-1">
+        <img
+          src={ImgHero}
+          alt="Carte stylisée de la France avec train"
+          class="rounded-xl shadow-lg w-full object-cover"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-base-200 py-20">
+    <div
+      class="container mx-auto px-6 lg:px-20 flex flex-col lg:flex-row items-center gap-12"
+    >
+      <div class="flex-1 order-2 lg:order-1">
+        <img
+          src={ImgAttractivite}
+          alt="Carte stylisée de la France avec train"
+          class="rounded-xl shadow-lg w-full object-cover"
+        />
+      </div>
+
+      <div class="flex-1 flex flex-col gap-6 order-1 lg:order-2">
+        <h2 class="text-3xl lg:text-4xl font-bold text-primary-content">
+          Les régions les plus attractives
+        </h2>
+
+        <p class="text-base lg:text-lg text-base-content max-w-lg">
+          Certaines régions et gares se distinguent par le nombre d’activités
+          touristiques accessibles à proximité. Notre analyse met en lumière ces
+          zones où le train transforme la découverte de la France en véritable
+          aventure.
+        </p>
+
+        <a href="/attractivite" class="btn btn-secondary btn-lg w-max mt-2">
+          Voir l’attractivité des régions
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20">
+    <div
+      class="container mx-auto px-6 lg:px-20 flex flex-col lg:flex-row items-center gap-12"
+    >
+      <div class="flex-1 flex flex-col gap-6">
+        <h2 class="text-3xl lg:text-4xl font-bold text-primary-content">
+          Voyager responsable
+        </h2>
+
+        <p class="text-base lg:text-lg text-base-content max-w-lg">
+          Et si voyager pouvait aussi être un choix responsable ? Comparer
+          l’impact carbone des différents modes de transport montre que le train
+          est de loin l’option la plus écologique pour explorer la France.
+        </p>
+
+        <a href="/durabilite" class="btn btn-accent btn-lg w-max mt-2">
+          Découvrir l’impact écologique
+        </a>
+      </div>
+
+      <div class="flex-1">
+        <img
+          src={ImgDurabilite}
+          alt="Carte stylisée de la France avec train"
+          class="rounded-xl shadow-lg w-full object-cover"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Conclusion sans visuel -->
+  <section class="bg-base-200 py-20">
+    <div
+      class="container mx-auto px-6 lg:px-20 flex flex-col items-start gap-6"
+    >
+      <h2 class="text-3xl lg:text-4xl font-bold text-primary-content">
+        Conclusion & perspectives
+      </h2>
+
+      <p class="text-base lg:text-lg text-base-content max-w-2xl">
+        Nos analyses montrent que le train n’est pas seulement un moyen de
+        transport, mais une véritable porte d’entrée pour explorer la France de
+        manière accessible, attractive et durable. Les gares et les régions
+        offrent une richesse d’expériences et un impact écologique réduit,
+        donnant ainsi envie de repenser nos voyages.
+      </p>
+
+      <a href="/conclusion" class="btn btn-primary btn-lg mt-4">
+        Lire la conclusion complète
+      </a>
+    </div>
+  </section>
 </Layout>

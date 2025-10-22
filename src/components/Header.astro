@@ -1,0 +1,86 @@
+---
+import Logo from "../assets/icons/Logo.png?url";
+---
+
+<header class="shadow-lg relative z-10 bg-base-200">
+  <div class="w-full flex flex-row items-center justify-between py-2 px-6">
+
+    <div class="flex items-center space-x-3">
+      <img src={Logo} alt="Logo Train" class="w-16 h-16 lg:w-20 lg:h-20" />
+    <a href="/" class="no-underline">
+        <h1 class="text-xl lg:text-2xl font-bold text-base-content">
+            Explore la France en Train
+        </h1>
+    </a>
+    </div>
+
+    <nav class="hidden lg:flex">
+      <ul class="flex gap-6 text-base-content font-medium">
+        <li>
+          <a href="/accessibilite" class="hover:text-primary transition-colors"
+            >Accessibilité</a>
+        </li>
+        <li>
+          <a href="/attractivite" class="hover:text-primary transition-colors"
+            >Attractivité</a>
+        </li>
+        <li>
+          <a href="/durabilite" class="hover:text-primary transition-colors"
+            >Durabilité</a>
+        </li>
+        <li>
+          <a href="/conclusion" class="hover:text-primary transition-colors"
+            >Conclusion</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Burger menu mobile -->
+    <div class="lg:hidden">
+      <button id="burger" class="text-base-content focus:outline-none">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-8 w-8"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <nav id="mobileMenu" class="hidden bg-base-200 lg:hidden">
+    <ul class="flex flex-col gap-4 p-4 text-base-content font-medium">
+      <li>
+        <a href="/accessibilite" class="hover:text-primary transition-colors"
+          >Accessibilité</a>
+      </li>
+      <li>
+        <a href="/attractivite" class="hover:text-primary transition-colors"
+          >Attractivité</a>
+      </li>
+      <li>
+        <a href="/durabilite" class="hover:text-primary transition-colors"
+          >Durabilité</a>
+      </li>
+      <li>
+        <a href="/conclusion" class="hover:text-primary transition-colors"
+          >Conclusion</a>
+      </li>
+    </ul>
+  </nav>
+
+  <script type="text/javascript">
+    const burger = document.getElementById("burger");
+    const mobileMenu = document.getElementById("mobileMenu");
+    burger.addEventListener("click", () => {
+      mobileMenu.classList.toggle("hidden");
+    });
+  </script>
+</header>

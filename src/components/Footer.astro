@@ -1,0 +1,91 @@
+---
+import Logo from "../assets/icons/Logo.png?url";
+---
+
+<footer class="bg-base-300 text-base-content shadow-inner">
+  <div class="container p-8 flex flex-col lg:flex-row justify-between gap-8">
+    <div class="flex flex-col items-start space-y-2">
+      <a href="/" aria-label="Accueil">
+        <img src={Logo} alt="Logo Train" class="w-16 h-16 lg:w-20 lg:h-20" />
+      </a>
+      <p class="text-sm lg:text-base">
+        Explorez la France autrement, durablement et confortablement.
+      </p>
+    </div>
+
+    <div class="flex flex-col">
+      <h3 class="font-semibold text-lg mb-2">Menu</h3>
+      <ul class="space-y-1">
+        <li>
+          <a href="/accessibilite" class="hover:text-primary transition-colors"
+            >Accessibilité</a
+          >
+        </li>
+        <li>
+          <a href="/attractivite" class="hover:text-primary transition-colors"
+            >Attractivité</a
+          >
+        </li>
+        <li>
+          <a href="/durabilite" class="hover:text-primary transition-colors"
+            >Durabilité</a
+          >
+        </li>
+        <li>
+          <a href="/conclusion" class="hover:text-primary transition-colors"
+            >Conclusion</a
+          >
+        </li>
+      </ul>
+    </div>
+
+    <div class="flex flex-col">
+      <h3 class="font-semibold text-lg mb-2">Contact</h3>
+      <p class="text-sm lg:text-base">
+        <a
+          href="mailto:lacroixeva32@gmail.com"
+          class="hover:underline underline-offset-2 hover:text-primary transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-sm"
+          aria-label="Envoyer un email à Eva"
+        >
+          lacroixeva32@gmail.com
+        </a>
+      </p>
+      <p>
+        <a
+          href="mailto:mathis.guellati@gmail.com"
+          class="hover:underline underline-offset-2 hover:text-primary transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-sm"
+          aria-label="Envoyer un email à Mathis"
+        >
+          mathis.guellati@gmail.com
+        </a>
+      </p>
+      <h3 class="font-semibold text-lg mt-4 mb-2">Sources & Défi</h3>
+      <p class="text-sm lg:text-base">
+        <a
+          href="https://defis.data.gouv.fr/defis/tourisme-en-train"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:underline underline-offset-2 hover:text-primary transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-sm"
+          aria-label="Lien vers le défi Tourisme en train"
+        >
+          Défi Tourisme en train
+        </a>
+      </p>
+      <p class="text-sm lg:text-base">
+        <a
+          href="mailto:tourisme-en-train@opendatauniversity.org"
+          class="hover:underline underline-offset-2 hover:text-primary transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-sm"
+          aria-label="Contacter le spécialiste du jeu de données"
+        >
+          Contact spécialiste des jeux de données
+        </a>
+      </p>
+    </div>
+  </div>
+
+  <div
+    class="border-t border-base-content/20 pt-4 pb-6 text-center text-sm text-base-content/70"
+  >
+    &copy; {new Date().getFullYear()} Explore la France en Train. Tous droits réservés.
+  </div>
+</footer>
