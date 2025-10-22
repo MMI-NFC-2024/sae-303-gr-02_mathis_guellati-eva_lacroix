@@ -1,6 +1,5 @@
 ---
 import garesAvecActivitesData from "../assets/garesAvecActivites.json";
-import departementsgeojsonData from "../assets/departementsgeojson.json";
 
 const regionsUniques = [
     "Toutes",
@@ -12,78 +11,76 @@ const regionsUniques = [
 ].sort();
 ---
 
-<div class="w-full max-w-7xl mx-auto font-sans">
-    <div
-        class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 bg-white p-6 rounded-lg shadow-md"
-    >
-        <div>
-            <label
-                for="region-select"
-                class="block text-sm font-semibold mb-2 text-gray-800"
-            >
-                🗺️ Région
-            </label>
-            <select
-                id="region-select"
-                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg outline-none transition-colors duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
-            >
-                {
-                    regionsUniques.map((region) => (
-                        <option value={region} selected={region === "Toutes"}>
-                            {region}
-                        </option>
-                    ))
-                }
-            </select>
-        </div>
+<div class="w-full max-w-7xl mx-auto">
+    <div class="card bg-base-100 shadow-xl mb-8">
+        <div class="card-body">
+            <h3 class="card-title text-xl mb-4">🎯 Personnalisez votre recherche</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text font-semibold">🗺️ Région</span>
+                    </label>
+                    <select id="region-select" class="select select-bordered w-full">
+                        {
+                            regionsUniques.map((region) => (
+                                <option value={region} selected={region === "Toutes"}>
+                                    {region}
+                                </option>
+                            ))
+                        }
+                    </select>
+                </div>
 
-        <div>
-            <label
-                for="seuil-poi"
-                class="flex justify-between text-sm font-semibold mb-2 text-gray-800"
-            >
-                <span>✨ Points d'intérêt minimum</span>
-                <span id="seuil-value" class="text-indigo-600 font-bold"
-                    >50</span
-                >
-            </label>
-            <input
-                type="range"
-                id="seuil-poi"
-                min="0"
-                max="300"
-                step="10"
-                value="50"
-                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-500"
-            />
-        </div>
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text font-semibold">✨ Points d'intérêt minimum</span>
+                        <span class="label-text-alt badge badge-primary" id="seuil-value">50</span>
+                    </label>
+                    <input
+                        type="range"
+                        id="seuil-poi"
+                        min="0"
+                        max="300"
+                        step="10"
+                        value="50"
+                        class="range range-primary"
+                    />
+                    <div class="w-full flex justify-between text-xs px-2 mt-2 opacity-60">
+                        <span>0</span>
+                        <span>150</span>
+                        <span>300</span>
+                    </div>
+                </div>
 
-        <div>
-            <label
-                for="nombre-gares"
-                class="flex justify-between text-sm font-semibold mb-2 text-gray-800"
-            >
-                <span>🚉 Nombre de gares à afficher</span>
-                <span id="nombre-value" class="text-indigo-600 font-bold"
-                    >10</span
-                >
-            </label>
-            <input
-                type="range"
-                id="nombre-gares"
-                min="1"
-                max="20"
-                step="1"
-                value="10"
-                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-500"
-            />
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text font-semibold">🚉 Nombre de gares</span>
+                        <span class="label-text-alt badge badge-secondary" id="nombre-value">10</span>
+                    </label>
+                    <input
+                        type="range"
+                        id="nombre-gares"
+                        min="1"
+                        max="20"
+                        step="1"
+                        value="10"
+                        class="range range-secondary"
+                    />
+                    <div class="w-full flex justify-between text-xs px-2 mt-2 opacity-60">
+                        <span>1</span>
+                        <span>10</span>
+                        <span>20</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div
-        id="map-container"
-        class="w-full overflow-x-auto rounded-lg shadow-lg bg-white"
-    >
+    <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+            <div id="map-container" class="w-full overflow-x-auto"></div>
+        </div>
     </div>
 </div>
 
@@ -126,12 +123,12 @@ const regionsUniques = [
 
         if (garesFiltrees.length === 0) {
             container.innerHTML = `
-        <div class="text-center py-16 bg-gray-50 rounded-xl">
-          <div class="text-6xl mb-5">🔍</div>
-          <div class="text-xl font-semibold mb-3 text-gray-800">Aucun résultat</div>
-          <div class="text-gray-600">Essayez de modifier vos critères de recherche</div>
-        </div>
-      `;
+                <div class="flex flex-col items-center justify-center py-16 bg-base-200 rounded-xl">
+                    <div class="text-6xl mb-4">🔍</div>
+                    <h3 class="text-xl font-bold mb-2">Aucun résultat</h3>
+                    <p class="text-base-content/60">Essayez de modifier vos critères de recherche</p>
+                </div>
+            `;
             return;
         }
 
@@ -144,8 +141,8 @@ const regionsUniques = [
             marginLeft: 80,
             style: {
                 fontSize: "15px",
-                fontFamily: "'Inter', system-ui, sans-serif",
-                background: "white",
+                fontFamily: "system-ui, -apple-system, sans-serif",
+                background: "transparent",
             },
             projection: {
                 type: "mercator",
@@ -205,17 +202,13 @@ const regionsUniques = [
     document.addEventListener("DOMContentLoaded", () => {
         createMap();
 
-        const regionSelect = document.getElementById(
-            "region-select",
-        ) as HTMLSelectElement;
+        const regionSelect = document.getElementById("region-select") as HTMLSelectElement;
         regionSelect?.addEventListener("change", (e) => {
             regionSelectionnee = (e.target as HTMLSelectElement).value;
             createMap();
         });
 
-        const seuilRange = document.getElementById(
-            "seuil-poi",
-        ) as HTMLInputElement;
+        const seuilRange = document.getElementById("seuil-poi") as HTMLInputElement;
         const seuilValue = document.getElementById("seuil-value");
         seuilRange?.addEventListener("input", (e) => {
             seuilPOI = parseInt((e.target as HTMLInputElement).value);
@@ -223,14 +216,11 @@ const regionsUniques = [
             createMap();
         });
 
-        const nombreRange = document.getElementById(
-            "nombre-gares",
-        ) as HTMLInputElement;
+        const nombreRange = document.getElementById("nombre-gares") as HTMLInputElement;
         const nombreValue = document.getElementById("nombre-value");
         nombreRange?.addEventListener("input", (e) => {
             nombreGaresMax = parseInt((e.target as HTMLInputElement).value);
-            if (nombreValue)
-                nombreValue.textContent = nombreGaresMax.toString();
+            if (nombreValue) nombreValue.textContent = nombreGaresMax.toString();
             createMap();
         });
     });
