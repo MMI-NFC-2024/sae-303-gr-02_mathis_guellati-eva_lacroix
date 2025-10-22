@@ -7,18 +7,15 @@ const garesSorted = garesAvecActivitesData
     .sort((a, b) => b.nombrePOI - a.nombrePOI);
 ---
 
-<div class="w-full max-w-7xl mx-auto font-sans">
-    <div class="mb-6">
-        <label
-            for="gare-search"
-            class="block text-base font-semibold mb-2 text-gray-800"
-        >
-            Sélectionner une gare
+<div class="w-full max-w-7xl mx-auto">
+    <div class="form-control w-full mb-6">
+        <label class="label">
+            <span class="label-text font-semibold">Sélectionner une gare</span>
         </label>
         <input
             type="text"
             id="gare-search"
-            class="w-full px-4 py-3 text-base border-2 border-gray-300 rounded-lg outline-none transition-colors duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+            class="input input-bordered w-full"
             placeholder="🔍 Rechercher une gare..."
             list="gares-list"
         />
@@ -27,15 +24,15 @@ const garesSorted = garesAvecActivitesData
         </datalist>
     </div>
 
-    <div
-        id="map-plot"
-        class="w-full flex justify-center items-center rounded-lg shadow-lg bg-white p-4"
-    >
+    <div class="card bg-base-100 shadow-xl mb-4">
+        <div class="card-body p-4">
+            <div id="map-plot" class="w-full flex justify-center items-center"></div>
+        </div>
     </div>
 
-    <p class="mt-4 text-sm text-gray-600 text-center italic">
-        Nombre de points d'intérêt touristiques accessibles par gare (rayon 10
-        km). | Sources : Base Gares SNCF & Open Data Tourisme
+    <p class="text-sm text-base-content/60 text-center italic">
+        Nombre de points d'intérêt touristiques accessibles par gare (rayon 10 km). 
+        | Sources : Base Gares SNCF & Open Data Tourisme
     </p>
 </div>
 
