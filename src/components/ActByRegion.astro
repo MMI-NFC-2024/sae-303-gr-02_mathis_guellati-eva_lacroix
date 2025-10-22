@@ -3,141 +3,134 @@ import garesAvecActivitesData from "../assets/garesAvecActivites.json";
 import * as d3 from "d3";
 
 const regionStatsData = Array.from(
-    d3.group(
+  d3.group(
+    garesAvecActivitesData.filter((d: any) => d.region !== "Non définie"),
+    (d: any) => d.region
+  ),
+  ([region, gares]) => ({
+    region,
+    nombreGares: gares.length,
+    totalPOI: d3.sum(gares, (d: any) => d.nombrePOI),
+    moyennePOI: d3.mean(gares, (d: any) => d.nombrePOI) || 0,
+    maxPOI: d3.max(gares, (d: any) => d.nombrePOI) || 0,
+  })
+).sort((a, b) => b.moyennePOI - a.moyennePOI);
+---
+
+<div class="w-full max-w-7xl mx-auto px-6 pt-6">
+  <div
+    class="bg-gradient-to-b from-gray-50 to-white rounded-xl shadow-lg p-6 overflow-x-auto"
+  >
+    <div id="regions-chart" class="w-full"></div>
+  </div>
+
+  <p class="mt-8 mb-4 text-sm text-info italic">
+    Attractivité touristique moyenne des régions françaises selon le nombre de
+    points d'intérêt (POI) accessibles par gare.
+  </p>
+</div>
+
+<script>
+  import * as Plot from "@observablehq/plot";
+  import * as d3 from "d3";
+  import garesAvecActivitesData from "../assets/garesAvecActivites.json";
+
+  function createChart() {
+    const container = document.getElementById("regions-chart");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    const regionStats = Array.from(
+      d3.group(
         garesAvecActivitesData.filter((d: any) => d.region !== "Non définie"),
-        (d: any) => d.region,
-    ),
-    ([region, gares]) => ({
+        (d: any) => d.region
+      ),
+      ([region, gares]) => ({
         region,
         nombreGares: gares.length,
         totalPOI: d3.sum(gares, (d: any) => d.nombrePOI),
         moyennePOI: d3.mean(gares, (d: any) => d.nombrePOI) || 0,
         maxPOI: d3.max(gares, (d: any) => d.nombrePOI) || 0,
-    }),
-).sort((a, b) => b.moyennePOI - a.moyennePOI);
----
+      })
+    ).sort((a, b) => b.moyennePOI - a.moyennePOI);
 
-<div class="w-full max-w-7xl mx-auto p-6">
-    <h2 class="text-3xl font-bold text-center mb-8 text-gray-900">
-        🗺️ Attractivité touristique des régions
-    </h2>
+    const plot = Plot.plot({
+      width: 1000,
+      marginLeft: 300,
+      marginRight: 200,
+      marginTop: 60,
+      marginBottom: 80,
+      height: 650,
+      style: {
+        fontSize: "16px",
+        fontFamily: "'SF Pro Display', 'Segoe UI', system-ui, sans-serif",
+        background: "transparent",
+      },
+      x: {
+        label: "Attractivité touristique moyenne (POI par gare)",
+        tickFormat: (d: number) => d.toFixed(0),
+        grid: true,
+        nice: true,
+        labelOffset: 50,
+      },
+      y: {
+        label: null,
+        tickPadding: 15,
+        tickSize: 0,
+      },
+      marks: [
+        Plot.barX(regionStats, {
+          y: "region",
+          x: "moyennePOI",
+          fill: (d: any) => {
+            const rank = regionStats.indexOf(d);
+            if (rank === 0) return "#d32f2f";
+            if (rank < 3) return "#f57c00";
+            if (rank < 6) return "#ff9800";
+            return "#ffb74d";
+          },
+          sort: { y: "-x" },
+          rx: 8,
+          strokeWidth: 1,
+          stroke: "#fff",
+          tip: true,
+          title: (d: any) =>
+            `🌍 ${d.region}\n━━━━━━━━━━━━━━━━━\n✨ ${d.moyennePOI.toFixed(
+              1
+            )} POI en moyenne par gare\n🎯 ${d.totalPOI.toLocaleString(
+              "fr-FR"
+            )} POI au total\n🚉 ${d.nombreGares} gares dans la région\n🔝 Record: ${
+              d.maxPOI
+            } POI (meilleure gare)`,
+        }),
 
-    <div
-        class="bg-gradient-to-b from-gray-50 to-white rounded-xl shadow-lg p-6 overflow-x-auto"
-    >
-        <div id="regions-chart" class="w-full"></div>
-    </div>
+        Plot.text(regionStats, {
+          y: "region",
+          x: "moyennePOI",
+          text: (d: any) => `${d.moyennePOI.toFixed(1)} POI`,
+          dx: 60,
+          fontSize: 15,
+          fontWeight: "800",
+          fill: "#b71c1c",
+          textAnchor: "start",
+        }),
 
-    <p class="mt-4 text-sm text-gray-600 text-center italic px-4">
-        Attractivité touristique moyenne des régions françaises selon le nombre
-        de points d'intérêt (POI) accessibles par gare.
-    </p>
-</div>
+        Plot.text(regionStats.slice(0, 1), {
+          y: "region",
+          x: "moyennePOI",
+          text: "🏆",
+          dx: (d: any) => d.moyennePOI / 2,
+          fontSize: 32,
+          fillOpacity: 0.3,
+        }),
 
-<script>
-    import * as Plot from "@observablehq/plot";
-    import * as d3 from "d3";
-    import garesAvecActivitesData from "../assets/garesAvecActivites.json";
+        Plot.ruleX([0], { stroke: "#2b2d42", strokeWidth: 2.5 }),
+      ],
+    });
 
-    function createChart() {
-        const container = document.getElementById("regions-chart");
-        if (!container) return;
+    container.appendChild(plot);
+  }
 
-        container.innerHTML = "";
-
-        const regionStats = Array.from(
-            d3.group(
-                garesAvecActivitesData.filter(
-                    (d: any) => d.region !== "Non définie",
-                ),
-                (d: any) => d.region,
-            ),
-            ([region, gares]) => ({
-                region,
-                nombreGares: gares.length,
-                totalPOI: d3.sum(gares, (d: any) => d.nombrePOI),
-                moyennePOI: d3.mean(gares, (d: any) => d.nombrePOI) || 0,
-                maxPOI: d3.max(gares, (d: any) => d.nombrePOI) || 0,
-            }),
-        ).sort((a, b) => b.moyennePOI - a.moyennePOI);
-
-        const plot = Plot.plot({
-            width: 1000,
-            marginLeft: 300,
-            marginRight: 200,
-            marginTop: 60,
-            marginBottom: 80,
-            height: 650,
-            style: {
-                fontSize: "16px",
-                fontFamily:
-                    "'SF Pro Display', 'Segoe UI', system-ui, sans-serif",
-                background: "transparent",
-            },
-            x: {
-                label: "Attractivité touristique moyenne (POI par gare)",
-                tickFormat: (d: number) => d.toFixed(0),
-                grid: true,
-                nice: true,
-                labelOffset: 50,
-            },
-            y: {
-                label: null,
-                tickPadding: 15,
-                tickSize: 0,
-            },
-            marks: [
-                Plot.barX(regionStats, {
-                    y: "region",
-                    x: "moyennePOI",
-                    fill: (d: any) => {
-                        const rank = regionStats.indexOf(d);
-                        if (rank === 0) return "#d32f2f";
-                        if (rank < 3) return "#f57c00";
-                        if (rank < 6) return "#ff9800";
-                        return "#ffb74d";
-                    },
-                    sort: { y: "-x" },
-                    rx: 8,
-                    strokeWidth: 1,
-                    stroke: "#fff",
-                    tip: true,
-                    title: (d: any) =>
-                        `🌍 ${d.region}\n━━━━━━━━━━━━━━━━━\n✨ ${d.moyennePOI.toFixed(
-                            1,
-                        )} POI en moyenne par gare\n🎯 ${d.totalPOI.toLocaleString(
-                            "fr-FR",
-                        )} POI au total\n🚉 ${d.nombreGares} gares dans la région\n🔝 Record: ${
-                            d.maxPOI
-                        } POI (meilleure gare)`,
-                }),
-
-                Plot.text(regionStats, {
-                    y: "region",
-                    x: "moyennePOI",
-                    text: (d: any) => `${d.moyennePOI.toFixed(1)} POI`,
-                    dx: 60,
-                    fontSize: 15,
-                    fontWeight: "800",
-                    fill: "#b71c1c",
-                    textAnchor: "start",
-                }),
-
-                Plot.text(regionStats.slice(0, 1), {
-                    y: "region",
-                    x: "moyennePOI",
-                    text: "🏆",
-                    dx: (d: any) => d.moyennePOI / 2,
-                    fontSize: 32,
-                    fillOpacity: 0.3,
-                }),
-
-                Plot.ruleX([0], { stroke: "#2b2d42", strokeWidth: 2.5 }),
-            ],
-        });
-
-        container.appendChild(plot);
-    }
-
-    document.addEventListener("DOMContentLoaded", createChart);
+  document.addEventListener("DOMContentLoaded", createChart);
 </script>

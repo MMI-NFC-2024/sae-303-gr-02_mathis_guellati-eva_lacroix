@@ -2,143 +2,196 @@
 import { onMount } from "astro/client";
 ---
 
-<div class="w-full max-w-6xl mx-auto p-6">
-    <h2 class="text-3xl font-bold text-center mb-8 text-gray-900">
-        📊 Corrélation entre les gares et les points d'intérêt
-    </h2>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 text-white p-6 rounded-xl shadow-lg">
-            <div class="text-sm font-semibold opacity-90 mb-2">Moyenne POI/gare</div>
-            <div id="moyenne-poi" class="text-4xl font-black mb-1">–</div>
-            <div class="text-sm opacity-90">Nombre moyen de points d'intérêt par gare</div>
+<div class="w-full max-w-7xl mx-auto px-6 pt-6">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+    <div
+      class="group flex gap-3 p-3 rounded-lg shadow ring-1 ring-white/10 bg-gradient-to-br from-accent to-cyan-500 text-white"
+    >
+      <div
+        class="flex-none w-14 h-14 rounded-md bg-white/10 flex items-center justify-center text-3xl"
+      >
+        🎯
+      </div>
+      <div class="flex-1">
+        <div class="text-sm font-semibold uppercase opacity-90 mb-1">
+          Moyenne POI / gare
         </div>
-
-        <div class="bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-xl shadow-lg">
-            <div class="text-sm font-semibold opacity-90 mb-2">Max POI</div>
-            <div id="max-poi" class="text-4xl font-black mb-1">–</div>
-            <div class="text-sm opacity-90">Région la plus riche en POI</div>
+        <div
+          id="moyenne-poi"
+          class="text-2xl font-extrabold leading-tight"
+          aria-live="polite"
+        >
+          –
         </div>
-
-        <div class="bg-gradient-to-br from-rose-500 to-rose-600 text-white p-6 rounded-xl shadow-lg">
-            <div class="text-sm font-semibold opacity-90 mb-2">Min POI</div>
-            <div id="min-poi" class="text-4xl font-black mb-1">–</div>
-            <div class="text-sm opacity-90">Région la moins équipée</div>
+        <div class="text-sm opacity-90 mt-1">
+          Nombre moyen de points d'intérêt par gare
         </div>
+      </div>
     </div>
 
-    <div class="bg-white rounded-xl shadow-lg p-6 overflow-x-auto">
-        <div id="region-plot" class="w-full"></div>
+    <div
+      class="group flex gap-3 p-3 rounded-lg shadow ring-1 ring-white/10 bg-gradient-to-br from-success to-secondary text-white"
+    >
+      <div
+        class="flex-none w-14 h-14 rounded-md bg-white/10 flex items-center justify-center text-3xl"
+      >
+        🚉
+      </div>
+      <div class="flex-1">
+        <div class="text-sm font-semibold uppercase opacity-90 mb-1">
+          Max POI
+        </div>
+        <div
+          id="max-poi"
+          class="text-2xl font-extrabold leading-tight"
+          aria-live="polite"
+        >
+          –
+        </div>
+        <div class="text-sm opacity-90 mt-1">Région la plus riche en POI</div>
+      </div>
     </div>
 
-    <p class="mt-4 text-sm text-gray-600 text-center italic">
-        Nombre total de points d’intérêt touristiques accessibles par région selon le nombre de gares • Source : Données SNCF & Tourisme 2025
-    </p>
+    <div
+      class="group flex gap-3 p-3 rounded-lg shadow ring-1 ring-white/10 bg-gradient-to-br from-rose-600/90 to-rose-500/80 text-white"
+    >
+      <div
+        class="flex-none w-14 h-14 rounded-md bg-white/10 flex items-center justify-center text-3xl"
+      >
+        📉
+      </div>
+      <div class="flex-1">
+        <div class="text-xs font-semibold uppercase opacity-80 mb-1">
+          Min POI
+        </div>
+        <div
+          id="min-poi"
+          class="text-xl md:text-2xl font-extrabold leading-tight"
+          aria-live="polite"
+        >
+          –
+        </div>
+        <div class="text-xs opacity-80 mt-1">Région la moins équipée</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-lg p-6 overflow-x-auto">
+    <div id="region-plot" class="w-full"></div>
+  </div>
+
+  <p class="mt-8 mb-4 text-sm text-info italic">
+    Nombre total de points d’intérêt touristiques accessibles par région selon
+    le nombre de gares
+  </p>
 </div>
 
 <script>
-    import * as Plot from "@observablehq/plot";
-    import * as d3 from "d3";
-    import regionStatsAvecNumero from "../assets/regionStatsAvecNumero.json";
+  import * as Plot from "@observablehq/plot";
+  import * as d3 from "d3";
+  import regionStatsAvecNumero from "../assets/regionStatsAvecNumero.json";
 
-    function createPlot(data) {
-        const container = document.getElementById("region-plot");
-        container.innerHTML = "";
+  function createPlot(data) {
+    const container = document.getElementById("region-plot");
+    container.innerHTML = "";
 
-        const plot = Plot.plot({
-            width: 1000,
-            height: 700,
-            marginTop: 80,
-            marginRight: 200,
-            marginBottom: 100,
-            marginLeft: 120,
-            style: {
-                fontSize: "13px",
-                fontFamily: "'Inter', system-ui, sans-serif",
-                background: "white",
+    const plot = Plot.plot({
+      width: 1000,
+      height: 700,
+      marginTop: 80,
+      marginRight: 200,
+      marginBottom: 100,
+      marginLeft: 120,
+      style: {
+        fontSize: "13px",
+        fontFamily: "'Inter', system-ui, sans-serif",
+        background: "white",
+      },
+      x: {
+        label: "🚉 Nombre de gares dans la région",
+        grid: true,
+        nice: true,
+        labelOffset: 50,
+      },
+      y: {
+        label: "🎯 Nombre total de points d'intérêt",
+        grid: true,
+        nice: true,
+        labelOffset: 55,
+      },
+      marks: [
+        Plot.ruleX(d3.range(0, 400, 50), { stroke: "#f0f0f0", strokeWidth: 1 }),
+        Plot.ruleY(d3.range(0, 13000, 1000), {
+          stroke: "#f0f0f0",
+          strokeWidth: 1,
+        }),
+
+        Plot.line(
+          [
+            { x: 0, y: 0 },
+            {
+              x: d3.max(data, (d) => d.nombreGares) * 1.05,
+              y: d3.max(data, (d) => d.totalPOI) * 1.05,
             },
-            x: {
-                label: "🚉 Nombre de gares dans la région",
-                grid: true,
-                nice: true,
-                labelOffset: 50,
-            },
-            y: {
-                label: "🎯 Nombre total de points d'intérêt",
-                grid: true,
-                nice: true,
-                labelOffset: 55,
-            },
-            marks: [
-                Plot.ruleX(d3.range(0, 400, 50), { stroke: "#f0f0f0", strokeWidth: 1 }),
-                Plot.ruleY(d3.range(0, 13000, 1000), { stroke: "#f0f0f0", strokeWidth: 1 }),
+          ],
+          {
+            x: "x",
+            y: "y",
+            stroke: "#e0e0e0",
+            strokeWidth: 2,
+            strokeDasharray: "8,4",
+          }
+        ),
 
-                Plot.line(
-                    [
-                        { x: 0, y: 0 },
-                        {
-                            x: d3.max(data, (d) => d.nombreGares) * 1.05,
-                            y: d3.max(data, (d) => d.totalPOI) * 1.05,
-                        },
-                    ],
-                    {
-                        x: "x",
-                        y: "y",
-                        stroke: "#e0e0e0",
-                        strokeWidth: 2,
-                        strokeDasharray: "8,4",
-                    }
-                ),
+        Plot.dot(data, {
+          x: "nombreGares",
+          y: "totalPOI",
+          r: 12,
+          fill: "#667eea",
+          fillOpacity: 0.9,
+          stroke: "white",
+          strokeWidth: 3,
+          tip: true,
+          title: (d) =>
+            `#${d.numero} - ${d.region}\n━━━━━━━━━━━━━━━━━\n🚉 ${d.nombreGares} gares\n🎯 ${d.totalPOI.toLocaleString("fr-FR")} POI\n✨ ${d.moyennePOI.toFixed(1)} POI/gare`,
+        }),
 
-                Plot.dot(data, {
-                    x: "nombreGares",
-                    y: "totalPOI",
-                    r: 12,
-                    fill: "#667eea",
-                    fillOpacity: 0.9,
-                    stroke: "white",
-                    strokeWidth: 3,
-                    tip: true,
-                    title: (d) =>
-                        `#${d.numero} - ${d.region}\n━━━━━━━━━━━━━━━━━\n🚉 ${d.nombreGares} gares\n🎯 ${d.totalPOI.toLocaleString("fr-FR")} POI\n✨ ${d.moyennePOI.toFixed(1)} POI/gare`,
-                }),
+        Plot.text(data, {
+          x: "nombreGares",
+          y: "totalPOI",
+          text: (d) => d.numero,
+          fontSize: 12,
+          fontWeight: "900",
+          fill: "white",
+          textAnchor: "middle",
+        }),
 
-                Plot.text(data, {
-                    x: "nombreGares",
-                    y: "totalPOI",
-                    text: (d) => d.numero,
-                    fontSize: 12,
-                    fontWeight: "900",
-                    fill: "white",
-                    textAnchor: "middle",
-                }),
-
-                Plot.ruleX([0], { stroke: "#2c3e50", strokeWidth: 2 }),
-                Plot.ruleY([0], { stroke: "#2c3e50", strokeWidth: 2 }),
-            ],
-            caption:
-                "Nombre total de points d’intérêt touristiques accessibles par région en fonction du nombre de gares",
-        });
-
-        container.appendChild(plot);
-    }
-
-    function updateStats(data) {
-        const moyennePOI = d3.mean(data, (d) => d.moyennePOI);
-        const maxPOI = d3.max(data, (d) => d.totalPOI);
-        const minPOI = d3.min(data, (d) => d.totalPOI);
-
-        const regionMax = data.find((d) => d.totalPOI === maxPOI)?.region || "–";
-        const regionMin = data.find((d) => d.totalPOI === minPOI)?.region || "–";
-
-        document.getElementById("moyenne-poi").textContent = moyennePOI.toFixed(1);
-        document.getElementById("max-poi").textContent = `${maxPOI.toLocaleString("fr-FR")} (${regionMax})`;
-        document.getElementById("min-poi").textContent = `${minPOI.toLocaleString("fr-FR")} (${regionMin})`;
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-        const data = regionStatsAvecNumero;
-        updateStats(data);
-        createPlot(data);
+        Plot.ruleX([0], { stroke: "#2c3e50", strokeWidth: 2 }),
+        Plot.ruleY([0], { stroke: "#2c3e50", strokeWidth: 2 }),
+      ]
     });
+
+    container.appendChild(plot);
+  }
+
+  function updateStats(data) {
+    const moyennePOI = d3.mean(data, (d) => d.moyennePOI);
+    const maxPOI = d3.max(data, (d) => d.totalPOI);
+    const minPOI = d3.min(data, (d) => d.totalPOI);
+
+    const regionMax = data.find((d) => d.totalPOI === maxPOI)?.region || "–";
+    const regionMin = data.find((d) => d.totalPOI === minPOI)?.region || "–";
+
+    document.getElementById("moyenne-poi").textContent = moyennePOI.toFixed(1);
+    document.getElementById("max-poi").textContent =
+      `${maxPOI.toLocaleString("fr-FR")} (${regionMax})`;
+    document.getElementById("min-poi").textContent =
+      `${minPOI.toLocaleString("fr-FR")} (${regionMin})`;
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const data = regionStatsAvecNumero;
+    updateStats(data);
+    createPlot(data);
+  });
 </script>
