@@ -1,4 +1,7 @@
 ---
+// ComparaisonEmissions.astro
+import dataEmission from "../assets/data_emission.json";
+
 const transports = [
     {
         nom: "Train",
@@ -34,7 +37,7 @@ const transports = [
 ---
 
 <div class="w-full max-w-6xl mx-auto">
-    <div id="emissions-chart" class="w-full overflow-x-auto"></div>
+    <div id="comparaison-chart" class="w-full overflow-x-auto"></div>
 
     <p class="mt-4 text-sm text-gray-600 text-center italic">
         Émissions moyennes de CO₂ par moyen de transport (toutes routes
@@ -48,7 +51,7 @@ const transports = [
     import * as d3 from "d3";
     import dataEmission from "../assets/data_emission.json";
 
-    const transports = [
+    const transportsStatic = [
         {
             nom: "Train",
             emoji: "🚂",
@@ -81,16 +84,16 @@ const transports = [
         },
     ];
 
-    function createChart() {
-        const container = document.getElementById("emissions-chart");
+    function createComparaisonChart() {
+        const container = document.getElementById("comparaison-chart");
         if (!container) return;
 
         container.innerHTML = "";
 
-        const donnees = transports.map((t) => {
+        const donnees = transportsStatic.map((t) => {
             const valeurs = dataEmission
-                .map((d: any) => d[t.champ])
-                .filter((v: any) => v != null && !isNaN(v));
+                .map((d) => d[t.champ])
+                .filter((v) => v != null && !isNaN(v));
 
             const moyenne = d3.mean(valeurs);
             const min = d3.min(valeurs);
@@ -108,8 +111,8 @@ const transports = [
             };
         });
 
-        const minEmission = d3.min(donnees, (d: any) => d.emissions) || 0;
-        const maxEmission = d3.max(donnees, (d: any) => d.emissions) || 1;
+        const minEmission = d3.min(donnees, (d) => d.emissions) || 0;
+        const maxEmission = d3.max(donnees, (d) => d.emissions) || 1;
 
         const plot = Plot.plot({
             width: 1000,
@@ -125,16 +128,13 @@ const transports = [
             },
             x: {
                 label: "Émissions moyennes de CO₂ (kg CO₂e) →",
-                tickFormat: (d: any) =>
+                tickFormat: (d) =>
                     d.toLocaleString("fr-FR", { maximumFractionDigits: 0 }),
                 grid: true,
                 nice: true,
                 labelOffset: 50,
             },
-            y: {
-                label: null,
-                tickPadding: 10,
-            },
+            y: { label: null, tickPadding: 10 },
             color: {
                 type: "linear",
                 domain: [minEmission, maxEmission],
@@ -142,7 +142,6 @@ const transports = [
                 legend: true,
                 label: "Émissions de CO₂ (kg CO₂e)",
             },
-
             marks: [
                 Plot.barX(donnees, {
                     y: "transport",
@@ -150,33 +149,18 @@ const transports = [
                     fill: "emissions",
                     sort: { y: "-x" },
                     rx: 8,
-                    tip: {
-                        format: {
-                            y: false,
-                            x: true,
-                            fill: false,
-                        },
-                    },
-                    title: (d: any) =>
-                        `${d.transport}\n━━━━━━━━━━━━━━━━━\n✓ Moyenne: ${d.emissions.toFixed(
-                            1,
-                        )} kg CO₂e\n✓ Médiane: ${d.mediane.toFixed(
-                            1,
-                        )} kg CO₂e\n✓ Min: ${d.min.toFixed(
-                            1,
-                        )} kg CO₂e\n✓ Max: ${d.max.toFixed(1)} kg CO₂e\n✓ ${
-                            d.description
-                        }\n✓ ${d.nbRoutes} routes analysées`,
+                    tip: { format: { y: false, x: true, fill: false } },
+                    title: (d) =>
+                        `${d.transport}\n━━━━━━━━━━━━━━━━━\n✓ Moyenne: ${d.emissions.toFixed(1)} kg CO₂e\n✓ Médiane: ${d.mediane.toFixed(1)} kg CO₂e\n✓ Min: ${d.min.toFixed(1)} kg CO₂e\n✓ Max: ${d.max.toFixed(1)} kg CO₂e\n✓ ${d.description}\n✓ ${d.nbRoutes} routes analysées`,
                 }),
-
                 Plot.text(donnees, {
                     y: "transport",
                     x: "emissions",
-                    text: (d: any) => `${d.emissions.toFixed(0)} kg`,
+                    text: (d) => `${d.emissions.toFixed(0)} kg`,
                     dx: 50,
                     fontSize: 14,
                     fontWeight: "700",
-                    fill: (d: any) =>
+                    fill: (d) =>
                         d3.interpolateRgbBasis([
                             "#2ecc71",
                             "#f1c40f",
@@ -194,6 +178,6 @@ const transports = [
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-        createChart();
+        createComparaisonChart();
     });
 </script>

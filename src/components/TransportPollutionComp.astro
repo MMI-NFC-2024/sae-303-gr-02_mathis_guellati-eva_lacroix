@@ -1,4 +1,5 @@
 ---
+// SimulateurCO2.astro
 ---
 
 <div class="w-full max-w-6xl mx-auto p-6">
@@ -12,8 +13,9 @@
             class="flex justify-between text-base font-semibold mb-2 text-gray-800"
         >
             <span>🚶 Nombre de voyageurs passant de la voiture au train</span>
-            <span id="voyageurs-value" class="text-indigo-600 font-bold"
-                >1 000</span
+            <span
+                id="simulateur-voyageurs-value"
+                class="text-indigo-600 font-bold">1 000</span
             >
         </label>
         <input
@@ -34,7 +36,7 @@
             <div class="text-sm font-semibold opacity-90 mb-2">
                 CO₂ économisé
             </div>
-            <div id="co2-economise" class="text-4xl font-black mb-1">
+            <div id="simulateur-co2-economise" class="text-4xl font-black mb-1">
                 115 kg
             </div>
             <div class="text-sm opacity-90">par trajet de 400 km</div>
@@ -46,7 +48,9 @@
             <div class="text-sm font-semibold opacity-90 mb-2">
                 🌳 Équivalent arbres
             </div>
-            <div id="arbres-equiv" class="text-4xl font-black mb-1">5</div>
+            <div id="simulateur-arbres-equiv" class="text-4xl font-black mb-1">
+                5
+            </div>
             <div class="text-sm opacity-90">arbres plantés par an</div>
         </div>
 
@@ -56,7 +60,12 @@
             <div class="text-sm font-semibold opacity-90 mb-2">
                 🚗 Voitures retirées
             </div>
-            <div id="voitures-retirees" class="text-4xl font-black mb-1">0</div>
+            <div
+                id="simulateur-voitures-retirees"
+                class="text-4xl font-black mb-1"
+            >
+                0
+            </div>
             <div class="text-sm opacity-90">
                 de la circulation (équivalent annuel)
             </div>
@@ -64,7 +73,7 @@
     </div>
 
     <div class="bg-white rounded-xl shadow-lg p-6 overflow-x-auto">
-        <div id="emissions-chart" class="w-full"></div>
+        <div id="simulateur-chart" class="w-full"></div>
     </div>
 
     <p class="mt-4 text-sm text-gray-600 text-center italic">
@@ -78,7 +87,7 @@
     import * as d3 from "d3";
 
     const distanceKm = 400;
-    const emissions = {
+    const emissionsData = {
         avion: { valeur: 0.23, emoji: "✈️", nom: "Avion", couleur: "#e74c3c" },
         voiture: {
             valeur: 0.119,
@@ -90,7 +99,7 @@
         train: { valeur: 0.004, emoji: "🚄", nom: "Train", couleur: "#27ae60" },
     };
 
-    function updateStats(nombreVoyageurs) {
+    function updateSimulateurStats(nombreVoyageurs) {
         const emissionVoiture = 0.119;
         const emissionTrain = 0.004;
 
@@ -102,21 +111,22 @@
         const arbresEquivalent = Math.round(co2EconomiseTonnes * 45);
         const voituresRetirees = Math.round(co2EconomiseTonnes / 2.3);
 
-        document.getElementById("co2-economise").textContent =
+        document.getElementById("simulateur-co2-economise").textContent =
             `${co2Economise.toFixed(0)} kg`;
-        document.getElementById("arbres-equiv").textContent = arbresEquivalent;
-        document.getElementById("voitures-retirees").textContent =
+        document.getElementById("simulateur-arbres-equiv").textContent =
+            arbresEquivalent;
+        document.getElementById("simulateur-voitures-retirees").textContent =
             voituresRetirees;
     }
 
-    function createChart(nombreVoyageurs) {
-        const container = document.getElementById("emissions-chart");
+    function createSimulateurChart(nombreVoyageurs) {
+        const container = document.getElementById("simulateur-chart");
         if (!container) return;
 
         container.innerHTML = "";
 
         const data = [];
-        for (const [mode, info] of Object.entries(emissions)) {
+        for (const [mode, info] of Object.entries(emissionsData)) {
             for (let n = 0; n <= nombreVoyageurs + 100; n += 100) {
                 data.push({
                     voyageurs: n,
@@ -143,16 +153,8 @@
                 fontSize: "14px",
                 background: "white",
             },
-            x: {
-                label: "Nombre de voyageurs",
-                grid: true,
-                nice: true,
-            },
-            y: {
-                label: "↑ CO₂ émis (tonnes)",
-                grid: true,
-                nice: true,
-            },
+            x: { label: "Nombre de voyageurs", grid: true, nice: true },
+            y: { label: "↑ CO₂ émis (tonnes)", grid: true, nice: true },
             color: {
                 domain: ["✈️ Avion", "🚗 Voiture", "🚌 Bus", "🚄 Train"],
                 range: ["#e74c3c", "#e67e22", "#f39c12", "#27ae60"],
@@ -169,7 +171,6 @@
                     title: (d) =>
                         `${d.mode}\n${d.voyageurs.toLocaleString("fr-FR")} voyageurs\n${d.co2.toFixed(1)} tonnes CO₂`,
                 }),
-
                 Plot.dot(pointsActuels, {
                     x: "voyageurs",
                     y: "co2",
@@ -184,23 +185,19 @@
         container.appendChild(plot);
     }
 
-    function update(nombreVoyageurs) {
-        document.getElementById("voyageurs-value").textContent =
+    function updateSimulateur(nombreVoyageurs) {
+        document.getElementById("simulateur-voyageurs-value").textContent =
             nombreVoyageurs.toLocaleString("fr-FR");
-
-        updateStats(nombreVoyageurs);
-
-        createChart(nombreVoyageurs);
+        updateSimulateurStats(nombreVoyageurs);
+        createSimulateurChart(nombreVoyageurs);
     }
 
     document.addEventListener("DOMContentLoaded", () => {
         const slider = document.getElementById("voyageurs-slider");
-
-        update(1000);
-
+        updateSimulateur(1000);
         slider?.addEventListener("input", (e) => {
             const value = parseInt(e.target.value);
-            update(value);
+            updateSimulateur(value);
         });
     });
 </script>
