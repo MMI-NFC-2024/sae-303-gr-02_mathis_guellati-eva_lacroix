@@ -2,226 +2,236 @@
 import garesAvecActivitesData from "../assets/garesAvecActivites.json";
 
 const regionsUniques = [
-    "Toutes",
-    ...new Set(
-        garesAvecActivitesData
-            .map((d: any) => d.region)
-            .filter((r: string) => r !== "Non définie"),
-    ),
+  "Toutes",
+  ...new Set(
+    garesAvecActivitesData
+      .map((d: any) => d.region)
+      .filter((r: string) => r !== "Non définie")
+  ),
 ].sort();
 ---
 
 <div class="w-full max-w-7xl mx-auto">
-    <div class="card bg-base-100 shadow-xl mb-8">
-        <div class="card-body">
-            <h3 class="card-title text-xl mb-4">🎯 Personnalisez votre recherche</h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="form-control w-full">
-                    <label class="label">
-                        <span class="label-text font-semibold">🗺️ Région</span>
-                    </label>
-                    <select id="region-select" class="select select-bordered w-full">
-                        {
-                            regionsUniques.map((region) => (
-                                <option value={region} selected={region === "Toutes"}>
-                                    {region}
-                                </option>
-                            ))
-                        }
-                    </select>
-                </div>
+    <div class="card-body">
+      <h3 class="card-title text-2xl mb-4">🎯 Personnalisez votre recherche</h3>
 
-                <div class="form-control w-full">
-                    <label class="label">
-                        <span class="label-text font-semibold">✨ Points d'intérêt minimum</span>
-                        <span class="label-text-alt badge badge-primary" id="seuil-value">50</span>
-                    </label>
-                    <input
-                        type="range"
-                        id="seuil-poi"
-                        min="0"
-                        max="300"
-                        step="10"
-                        value="50"
-                        class="range range-primary"
-                    />
-                    <div class="w-full flex justify-between text-xs px-2 mt-2 opacity-60">
-                        <span>0</span>
-                        <span>150</span>
-                        <span>300</span>
-                    </div>
-                </div>
-
-                <div class="form-control w-full">
-                    <label class="label">
-                        <span class="label-text font-semibold">🚉 Nombre de gares</span>
-                        <span class="label-text-alt badge badge-secondary" id="nombre-value">10</span>
-                    </label>
-                    <input
-                        type="range"
-                        id="nombre-gares"
-                        min="1"
-                        max="20"
-                        step="1"
-                        value="10"
-                        class="range range-secondary"
-                    />
-                    <div class="w-full flex justify-between text-xs px-2 mt-2 opacity-60">
-                        <span>1</span>
-                        <span>10</span>
-                        <span>20</span>
-                    </div>
-                </div>
-            </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text font-semibold text-lg">🗺️ Région</span>
+          </label>
+          <select id="region-select" class="select select-bordered w-full">
+            {
+              regionsUniques.map((region) => (
+                <option value={region} selected={region === "Toutes"}>
+                  {region}
+                </option>
+              ))
+            }
+          </select>
         </div>
+
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text font-semibold text-lg"
+              >✨ Points d'intérêt minimum</span
+            >
+            <span class="label-text-alt badge badge-primary" id="seuil-value"
+              >50</span
+            >
+          </label>
+          <input
+            type="range"
+            id="seuil-poi"
+            min="0"
+            max="300"
+            step="10"
+            value="50"
+            class="range range-primary"
+          />
+          <div class="w-full flex justify-between text-xs px-2 mt-2 opacity-60">
+            <span>0</span>
+            <span>150</span>
+            <span>300</span>
+          </div>
+        </div>
+
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text font-semibold text:lg">🚉 Nombre de gares</span>
+            <span class="label-text-alt badge badge-secondary" id="nombre-value"
+              >10</span
+            >
+          </label>
+          <input
+            type="range"
+            id="nombre-gares"
+            min="1"
+            max="20"
+            step="1"
+            value="10"
+            class="range range-secondary"
+          />
+          <div class="w-full flex justify-between text-xs px-2 mt-2 opacity-60">
+            <span>1</span>
+            <span>10</span>
+            <span>20</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-            <div id="map-container" class="w-full overflow-x-auto"></div>
-        </div>
+  <div class="bg-white rounded-xl shadow-lg p-6 overflow-x-auto">
+    <div class="card-body">
+      <div id="map-container" class="w-full overflow-x-auto"></div>
     </div>
+  </div>
+  <p class="mt-8 mb-4 text-sm text-info italic">
+    Total des points d’intérêt touristiques par région (filtrable par nombre de
+    gares)
+  </p>
 </div>
 
 <script>
-    import * as Plot from "@observablehq/plot";
-    import * as d3 from "d3";
-    import garesAvecActivitesData from "../assets/garesAvecActivites.json";
-    import departementsgeojsonData from "../assets/departementsgeojson.json";
+  import * as Plot from "@observablehq/plot";
+  import * as d3 from "d3";
+  import garesAvecActivitesData from "../assets/garesAvecActivites.json";
+  import departementsgeojsonData from "../assets/departementsgeojson.json";
 
-    const garesAvecActivites = garesAvecActivitesData;
-    const departementsgeojson = departementsgeojsonData;
+  const garesAvecActivites = garesAvecActivitesData;
+  const departementsgeojson = departementsgeojsonData;
 
-    let regionSelectionnee = "Toutes";
-    let seuilPOI = 50;
-    let nombreGaresMax = 10;
+  let regionSelectionnee = "Toutes";
+  let seuilPOI = 50;
+  let nombreGaresMax = 10;
 
-    function filtrerGares() {
-        let resultats = garesAvecActivites
-            .filter((d: any) => d.region !== "Non définie")
-            .filter((d: any) => d.nombrePOI >= seuilPOI);
+  function filtrerGares() {
+    let resultats = garesAvecActivites
+      .filter((d: any) => d.region !== "Non définie")
+      .filter((d: any) => d.nombrePOI >= seuilPOI);
 
-        if (regionSelectionnee !== "Toutes") {
-            resultats = resultats.filter(
-                (d: any) => d.region === regionSelectionnee,
-            );
-        }
-
-        return resultats
-            .sort((a: any, b: any) => b.nombrePOI - a.nombrePOI)
-            .slice(0, nombreGaresMax);
+    if (regionSelectionnee !== "Toutes") {
+      resultats = resultats.filter((d: any) => d.region === regionSelectionnee);
     }
 
-    function createMap() {
-        const container = document.getElementById("map-container");
-        if (!container) return;
+    return resultats
+      .sort((a: any, b: any) => b.nombrePOI - a.nombrePOI)
+      .slice(0, nombreGaresMax);
+  }
 
-        container.innerHTML = "";
+  function createMap() {
+    const container = document.getElementById("map-container");
+    if (!container) return;
 
-        const garesFiltrees = filtrerGares();
+    container.innerHTML = "";
 
-        if (garesFiltrees.length === 0) {
-            container.innerHTML = `
+    const garesFiltrees = filtrerGares();
+
+    if (garesFiltrees.length === 0) {
+      container.innerHTML = `
                 <div class="flex flex-col items-center justify-center py-16 bg-base-200 rounded-xl">
                     <div class="text-6xl mb-4">🔍</div>
                     <h3 class="text-xl font-bold mb-2">Aucun résultat</h3>
                     <p class="text-base-content/60">Essayez de modifier vos critères de recherche</p>
                 </div>
             `;
-            return;
-        }
-
-        const plot = Plot.plot({
-            width: 1000,
-            height: 700,
-            marginTop: 60,
-            marginRight: 220,
-            marginBottom: 80,
-            marginLeft: 80,
-            style: {
-                fontSize: "15px",
-                fontFamily: "system-ui, -apple-system, sans-serif",
-                background: "transparent",
-            },
-            projection: {
-                type: "mercator",
-                domain: departementsgeojson,
-            },
-            color: {
-                type: "linear",
-                domain: [
-                    d3.min(garesFiltrees, (d: any) => d.nombrePOI),
-                    d3.max(garesFiltrees, (d: any) => d.nombrePOI),
-                ],
-                range: ["#ffd93d", "#d32f2f"],
-                legend: true,
-                label: "Points d'intérêt",
-            },
-            marks: [
-                Plot.geo(departementsgeojson, {
-                    fill: "#f5f5f5",
-                    stroke: "#ddd",
-                    strokeWidth: 0.5,
-                }),
-
-                Plot.dot(garesFiltrees, {
-                    x: "longitude",
-                    y: "latitude",
-                    r: (d: any) => Math.sqrt(d.nombrePOI) * 2,
-                    fill: "nombrePOI",
-                    fillOpacity: 0.8,
-                    stroke: "white",
-                    strokeWidth: 2.5,
-                    tip: true,
-                    title: (d: any) =>
-                        `🚉 ${d.nom}\n━━━━━━━━━━━━━━━━━\n📍 ${d.region}\n🎯 ${
-                            d.nombrePOI
-                        } points d'intérêt\n✨ Classement: #${garesFiltrees.indexOf(d) + 1}`,
-                }),
-
-                Plot.text(garesFiltrees.slice(0, 5), {
-                    x: "longitude",
-                    y: "latitude",
-                    text: "nom",
-                    dy: -25,
-                    fontSize: 11,
-                    fontWeight: "700",
-                    fill: "#d32f2f",
-                    stroke: "white",
-                    strokeWidth: 4,
-                    paintOrder: "stroke",
-                    textAnchor: "middle",
-                }),
-            ],
-        });
-
-        container.appendChild(plot);
+      return;
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-        createMap();
+    const plot = Plot.plot({
+      width: 1000,
+      height: 700,
+      marginTop: 60,
+      marginRight: 220,
+      marginBottom: 80,
+      marginLeft: 80,
+      style: {
+        fontSize: "15px",
+        fontFamily: "system-ui, -apple-system, sans-serif",
+        background: "transparent",
+      },
+      projection: {
+        type: "mercator",
+        domain: departementsgeojson,
+      },
+      color: {
+        type: "linear",
+        domain: [
+          d3.min(garesFiltrees, (d: any) => d.nombrePOI),
+          d3.max(garesFiltrees, (d: any) => d.nombrePOI),
+        ],
+        range: ["#ffd93d", "#d32f2f"],
+        legend: true,
+        label: "Points d'intérêt",
+      },
+      marks: [
+        Plot.geo(departementsgeojson, {
+          fill: "#f5f5f5",
+          stroke: "#ddd",
+          strokeWidth: 0.5,
+        }),
 
-        const regionSelect = document.getElementById("region-select") as HTMLSelectElement;
-        regionSelect?.addEventListener("change", (e) => {
-            regionSelectionnee = (e.target as HTMLSelectElement).value;
-            createMap();
-        });
+        Plot.dot(garesFiltrees, {
+          x: "longitude",
+          y: "latitude",
+          r: (d: any) => Math.sqrt(d.nombrePOI) * 2,
+          fill: "nombrePOI",
+          fillOpacity: 0.8,
+          stroke: "white",
+          strokeWidth: 2.5,
+          tip: true,
+          title: (d: any) =>
+            `🚉 ${d.nom}\n━━━━━━━━━━━━━━━━━\n📍 ${d.region}\n🎯 ${
+              d.nombrePOI
+            } points d'intérêt\n✨ Classement: #${garesFiltrees.indexOf(d) + 1}`,
+        }),
 
-        const seuilRange = document.getElementById("seuil-poi") as HTMLInputElement;
-        const seuilValue = document.getElementById("seuil-value");
-        seuilRange?.addEventListener("input", (e) => {
-            seuilPOI = parseInt((e.target as HTMLInputElement).value);
-            if (seuilValue) seuilValue.textContent = seuilPOI.toString();
-            createMap();
-        });
-
-        const nombreRange = document.getElementById("nombre-gares") as HTMLInputElement;
-        const nombreValue = document.getElementById("nombre-value");
-        nombreRange?.addEventListener("input", (e) => {
-            nombreGaresMax = parseInt((e.target as HTMLInputElement).value);
-            if (nombreValue) nombreValue.textContent = nombreGaresMax.toString();
-            createMap();
-        });
+        Plot.text(garesFiltrees.slice(0, 5), {
+          x: "longitude",
+          y: "latitude",
+          text: "nom",
+          dy: -25,
+          fontSize: 11,
+          fontWeight: "700",
+          fill: "#d32f2f",
+          stroke: "white",
+          strokeWidth: 4,
+          paintOrder: "stroke",
+          textAnchor: "middle",
+        }),
+      ],
     });
+
+    container.appendChild(plot);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    createMap();
+
+    const regionSelect = document.getElementById(
+      "region-select"
+    ) as HTMLSelectElement;
+    regionSelect?.addEventListener("change", (e) => {
+      regionSelectionnee = (e.target as HTMLSelectElement).value;
+      createMap();
+    });
+
+    const seuilRange = document.getElementById("seuil-poi") as HTMLInputElement;
+    const seuilValue = document.getElementById("seuil-value");
+    seuilRange?.addEventListener("input", (e) => {
+      seuilPOI = parseInt((e.target as HTMLInputElement).value);
+      if (seuilValue) seuilValue.textContent = seuilPOI.toString();
+      createMap();
+    });
+
+    const nombreRange = document.getElementById(
+      "nombre-gares"
+    ) as HTMLInputElement;
+    const nombreValue = document.getElementById("nombre-value");
+    nombreRange?.addEventListener("input", (e) => {
+      nombreGaresMax = parseInt((e.target as HTMLInputElement).value);
+      if (nombreValue) nombreValue.textContent = nombreGaresMax.toString();
+      createMap();
+    });
+  });
 </script>
