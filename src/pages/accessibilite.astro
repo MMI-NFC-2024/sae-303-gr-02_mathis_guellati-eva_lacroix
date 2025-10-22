@@ -13,23 +13,22 @@ const topGares = garesValides
     .slice(0, 5);
 ---
 
-<Layout>
-    <div class="bg-base-100 min-h-screen">
-        <div class="hero bg-gradient-to-r from-primary to-secondary py-16">
-            <div class="hero-content text-center">
-                <div class="max-w-4xl">
-                    <h1 class="text-5xl font-bold text-primary-content mb-6">
-                        🗺️ Accessibilité touristique par le train
-                    </h1>
-                    <p class="text-xl text-primary-content/90 max-w-2xl mx-auto">
-                        Découvrez le potentiel touristique accessible depuis
-                        chaque gare française
-                    </p>
-                </div>
+<Layout title="Accessibilité touristique">
+    <div class="hero bg-gradient-to-br from-blue-500 to-blue-700 min-h-[400px]">
+        <div class="hero-content text-center text-white">
+            <div class="max-w-3xl">
+                <h1 class="text-5xl font-bold mb-4 drop-shadow-lg">
+                    Accessibilité touristique par le train
+                </h1>
+                <p class="text-xl opacity-95">
+                    Découvrez le potentiel touristique accessible depuis chaque gare française
+                </p>
             </div>
         </div>
+    </div>
 
-        <div class="container mx-auto px-6 lg:px-20 py-12">
+    <div class="container mx-auto px-4 py-12 max-w-7xl">
+        <section class="mb-12">
             <div class="alert alert-info shadow-lg mb-8">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -194,17 +193,21 @@ const topGares = garesValides
                     </div>
                 </div>
             </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-base-content mb-2">
+                🗺️ Carte interactive de l'accessibilité touristique
+            </h2>
+            <p class="text-lg text-base-content/70 mb-8">
+                Explorez la répartition des points d'intérêt accessibles par le train
+            </p>
 
             <div class="card bg-base-100 shadow-2xl transition-all duration-300" id="carte-card">
                 <div class="card-body">
                     <div class="flex justify-between items-center mb-6">
-                        <h2 class="card-title text-3xl">
-                            🗺️ Carte interactive de l'accessibilité touristique
-                        </h2>
-                        <button
-                            class="btn btn-primary btn-outline gap-2"
-                            id="fullscreen-btn"
-                        >
+                        <h3 class="text-xl font-semibold">Carte de France des gares</h3>
+                        <button class="btn btn-primary btn-outline gap-2" id="fullscreen-btn">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -266,16 +269,22 @@ const topGares = garesValides
                     </div>
                 </div>
             </div>
+        </section>
 
-            <div class="mt-12 text-center">
-                <div class="join join-vertical lg:join-horizontal">
-                    <a href="/" class="btn btn-outline join-item">
-                        ← Retour à l'accueil
-                    </a>
-                    <a href="/attractivite" class="btn btn-primary join-item">
-                        Voir l'attractivité des régions →
-                    </a>
-                </div>
+        <div class="text-center">
+            <div class="join join-vertical sm:join-horizontal">
+                <a href="/" class="btn btn-outline join-item gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                    </svg>
+                    Retour à l'accueil
+                </a>
+                <a href="/attractivite" class="btn btn-primary join-item gap-2">
+                    Attractivité des régions
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                </a>
             </div>
         </div>
     </div>
