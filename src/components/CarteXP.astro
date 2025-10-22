@@ -29,7 +29,7 @@ const garesSorted = garesAvecActivitesData
 
     <div
         id="map-plot"
-        class="w-full overflow-x-auto rounded-lg shadow-lg bg-white"
+        class="w-full flex justify-center items-center rounded-lg shadow-lg bg-white p-4"
     >
     </div>
 
@@ -62,6 +62,10 @@ const garesSorted = garesAvecActivitesData
         const plot = Plot.plot({
             width: 1200,
             height: 700,
+            marginLeft: 50,
+            marginRight: 50,
+            marginTop: 50,
+            marginBottom: 50,
 
             projection: {
                 type: "mercator",
@@ -72,6 +76,7 @@ const garesSorted = garesAvecActivitesData
                 legend: true,
                 scheme: "Turbo",
                 domain: [0, d3.max(garesAvecActivites, (d) => d.nombrePOI)],
+                label: "Points d'intérêt"
             },
 
             marks: [
@@ -89,10 +94,10 @@ const garesSorted = garesAvecActivitesData
                     strokeWidth: 1.5,
                     opacity: (d) =>
                         !selectedGare
-                            ? 0.8
+                            ? 0.95
                             : d.nom === selectedGare.nom
                               ? 1
-                              : 0.2,
+                              : 0.4,
                     tip: true,
                     channels: {
                         Gare: "nom",
@@ -117,6 +122,18 @@ const garesSorted = garesAvecActivitesData
         });
 
         container.appendChild(plot);
+
+        const legend = plot.querySelector('[aria-label="color legend"]');
+        if (legend) {
+            legend.style.position = "absolute";
+            legend.style.top = "20px";
+            legend.style.left = "20px";
+            legend.style.right = "auto";
+        }
+
+        plot.style.position = "relative";
+        plot.style.margin = "0 auto";
+        plot.style.display = "block";
     }
 
     document.addEventListener("DOMContentLoaded", () => {
