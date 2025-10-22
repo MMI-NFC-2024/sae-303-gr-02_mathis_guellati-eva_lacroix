@@ -195,7 +195,7 @@ const topGares = garesValides
                 </div>
             </div>
 
-            <div class="card bg-base-100 shadow-2xl" id="carte-card">
+            <div class="card bg-base-100 shadow-2xl transition-all duration-300" id="carte-card">
                 <div class="card-body">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="card-title text-3xl">
@@ -280,61 +280,8 @@ const topGares = garesValides
         </div>
     </div>
 
-    <style>
-        #carte-card.fullscreen-mode {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 9999;
-            margin: 0;
-            border-radius: 0;
-            max-width: none;
-            overflow-y: auto;
-        }
-
-        #carte-card.fullscreen-mode .card-body {
-            height: auto;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        #carte-card.fullscreen-mode #fullscreen-btn {
-            display: none;
-        }
-
-        #fullscreen-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 9998;
-        }
-
-        #fullscreen-overlay.active {
-            display: block;
-        }
-
-        #close-fullscreen-floating {
-            display: none;
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 10000;
-        }
-
-        #close-fullscreen-floating.active {
-            display: block;
-        }
-    </style>
-
-    <div id="fullscreen-overlay"></div>
-    <button id="close-fullscreen-floating" class="btn btn-circle btn-lg btn-error">
+    <div id="fullscreen-overlay" class="hidden fixed inset-0 bg-black/50 z-[9998]"></div>
+    <button id="close-fullscreen-floating" class="hidden btn btn-circle btn-lg btn-error fixed top-4 right-4 z-[10000]">
         ✕
     </button>
 
@@ -346,16 +293,20 @@ const topGares = garesValides
             const carteCard = document.getElementById('carte-card');
 
             fullscreenBtn?.addEventListener('click', () => {
-                carteCard?.classList.add('fullscreen-mode');
-                overlay?.classList.add('active');
-                closeBtn?.classList.add('active');
+                carteCard?.classList.add('fixed', 'inset-0', 'w-screen', 'h-screen', 'z-[9999]', 'm-0', 'rounded-none', 'max-w-none', 'overflow-y-auto');
+                carteCard?.querySelector('.card-body')?.classList.add('h-auto', 'min-h-screen', 'flex', 'flex-col');
+                fullscreenBtn?.classList.add('hidden');
+                overlay?.classList.remove('hidden');
+                closeBtn?.classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
             });
 
             const closeFullscreen = () => {
-                carteCard?.classList.remove('fullscreen-mode');
-                overlay?.classList.remove('active');
-                closeBtn?.classList.remove('active');
+                carteCard?.classList.remove('fixed', 'inset-0', 'w-screen', 'h-screen', 'z-[9999]', 'm-0', 'rounded-none', 'max-w-none', 'overflow-y-auto');
+                carteCard?.querySelector('.card-body')?.classList.remove('h-auto', 'min-h-screen', 'flex', 'flex-col');
+                fullscreenBtn?.classList.remove('hidden');
+                overlay?.classList.add('hidden');
+                closeBtn?.classList.add('hidden');
                 document.body.style.overflow = '';
             };
 
@@ -363,7 +314,7 @@ const topGares = garesValides
             overlay?.addEventListener('click', closeFullscreen);
             
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && carteCard?.classList.contains('fullscreen-mode')) {
+                if (e.key === 'Escape' && carteCard?.classList.contains('fixed')) {
                     closeFullscreen();
                 }
             });
