@@ -8,7 +8,7 @@ import ImgDurabilite from "../assets/img/ImgDurabiliteAccueil.jpg?url";
 <Layout>
   <section class="relative bg-base-100">
     <div
-      class="container mx-auto px-6 lg:px-20 py-20 flex flex-col lg:flex-row items-center gap-12"
+      class="container mx-auto px-6 lg:px-20 py-20 flex flex-col lg:flex-row lg:items-center gap-12"
     >
       <div class="flex-1 flex flex-col gap-6">
         <h1
@@ -53,9 +53,9 @@ import ImgDurabilite from "../assets/img/ImgDurabiliteAccueil.jpg?url";
     </div>
   </section>
 
-  <section class="bg-base-200 py-20">
+  <section class="bg-base-200 lg:py-20 py-10">
     <div
-      class="container mx-auto px-6 lg:px-20 flex flex-col lg:flex-row items-center gap-12"
+      class="container mx-auto px-6 lg:px-20 flex flex-col lg:flex-row lg:items-center gap-12"
     >
       <div class="flex-1 order-2 lg:order-1">
         <img
@@ -77,16 +77,16 @@ import ImgDurabilite from "../assets/img/ImgDurabiliteAccueil.jpg?url";
           aventure.
         </p>
 
-        <a href="/attractivite" class="btn btn-secondary btn-lg w-max mt-2">
+        <a href="/attractivite" class="btn btn-accent btn-lg w-max mt-2">
           Voir l’attractivité des régions
         </a>
       </div>
     </div>
   </section>
 
-  <section class="py-20">
+  <section class="lg:py-20 py-10">
     <div
-      class="container mx-auto px-6 lg:px-20 flex flex-col lg:flex-row items-center gap-12"
+      class="container mx-auto px-6 lg:px-20 flex flex-col lg:flex-row lg:items-center gap-12"
     >
       <div class="flex-1 flex flex-col gap-6">
         <h2 class="text-3xl lg:text-4xl font-bold text-primary-content">
@@ -99,7 +99,7 @@ import ImgDurabilite from "../assets/img/ImgDurabiliteAccueil.jpg?url";
           est de loin l’option la plus écologique pour explorer la France.
         </p>
 
-        <a href="/durabilite" class="btn btn-accent btn-lg w-max mt-2">
+        <a href="/durabilite" class="btn btn-secondary btn-lg w-max mt-2">
           Découvrir l’impact écologique
         </a>
       </div>
@@ -114,26 +114,62 @@ import ImgDurabilite from "../assets/img/ImgDurabiliteAccueil.jpg?url";
     </div>
   </section>
 
-  <!-- Section Conclusion sans visuel -->
-  <section class="bg-base-200 py-20">
+  <section
+    role="region"
+    aria-labelledby="conclusion-title"
+    data-theme="train"
+    class="relative lg:py-24 py-16 bg-gradient-to-br from-primary/90 via-secondary/60 to-accent/30 text-base-content overflow-hidden"
+  >
     <div
-      class="container mx-auto px-6 lg:px-20 flex flex-col items-start gap-6"
+      class="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 backdrop-blur-sm pointer-events-none"
     >
-      <h2 class="text-3xl lg:text-4xl font-bold text-primary-content">
-        Conclusion & perspectives
-      </h2>
+    </div>
 
-      <p class="text-base lg:text-lg text-base-content max-w-2xl">
-        Nos analyses montrent que le train n’est pas seulement un moyen de
-        transport, mais une véritable porte d’entrée pour explorer la France de
-        manière accessible, attractive et durable. Les gares et les régions
-        offrent une richesse d’expériences et un impact écologique réduit,
-        donnant ainsi envie de repenser nos voyages.
-      </p>
+    <div
+      class="relative container mx-auto px-6 lg:px-20 flex flex-col items-center text-center gap-10"
+    >
+      <div
+        class="max-w-4xl bg-base-100/85 backdrop-blur-xl rounded-3xl p-12 lg:p-16 shadow-xl border border-base-200/40 transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl text-left"
+      >
+        <div class="flex items-center gap-3 mb-6">
+          <span class="h-0.5 w-8 bg-neutral/80 rounded-full"></span>
+          <span
+            class="uppercase tracking-widest text-sm font-semibold text-neutral/70"
+          >
+            Bilan du voyage
+          </span>
+        </div>
 
-      <a href="/conclusion" class="btn btn-primary btn-lg mt-4">
-        Lire la conclusion complète
-      </a>
+        <!-- Titre -->
+        <h2
+          id="conclusion-title"
+          class="text-4xl lg:text-5xl font-extrabold leading-tight text-base-content mb-6"
+        >
+          Conclusion & perspectives
+        </h2>
+
+        <!-- Texte -->
+        <p
+          class="text-lg lg:text-xl leading-relaxed text-base-content/90 max-w-2xl"
+        >
+          Nos analyses montrent que le train n’est pas seulement un moyen de
+          transport, mais une véritable porte d’entrée pour explorer la France
+          de manière accessible, attractive et durable. Les gares et les régions
+          offrent une richesse d’expériences et un impact écologique réduit,
+          donnant envie de repenser nos voyages vers un tourisme plus
+          responsable.
+        </p>
+
+        <!-- Bouton -->
+        <div class="mt-10">
+          <a
+            href="/conclusion"
+            class="btn btn-lg btn-primary shadow-md hover:shadow-xl hover:scale-105 transition-all"
+          >
+            Lire la conclusion complète
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 </Layout>
