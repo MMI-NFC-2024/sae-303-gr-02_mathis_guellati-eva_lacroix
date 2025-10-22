@@ -36,14 +36,16 @@ const transports = [
 ];
 ---
 
-<div class="w-full max-w-6xl mx-auto">
-    <div id="comparaison-chart" class="w-full overflow-x-auto"></div>
+<div class="w-full flex justify-center items-center">
+    <div class="max-w-6xl w-full">
+        <div id="comparaison-chart" class="w-full overflow-x-auto relative pt-15"></div>
 
-    <p class="mt-4 text-sm text-gray-600 text-center italic">
-        Émissions moyennes de CO₂ par moyen de transport (toutes routes
-        confondues) | Sources : Base de données comparatives des émissions de
-        CO₂ – data.gouv.fr
-    </p>
+        <p class="mt-4 text-sm text-gray-600 text-center italic">
+            Émissions moyennes de CO₂ par moyen de transport (toutes routes
+            confondues) | Sources : Base de données comparatives des émissions de
+            CO₂ – data.gouv.fr
+        </p>
+    </div>
 </div>
 
 <script>
@@ -118,6 +120,7 @@ const transports = [
             width: 1000,
             marginLeft: 200,
             marginRight: 100,
+            marginTop: 60,
             height: 480,
             style: {
                 fontSize: "15px",
@@ -139,8 +142,7 @@ const transports = [
                 type: "linear",
                 domain: [minEmission, maxEmission],
                 range: ["#2ecc71", "#f1c40f", "#e74c3c"],
-                legend: true,
-                label: "Émissions de CO₂ (kg CO₂e)",
+                legend: false,
             },
             marks: [
                 Plot.barX(donnees, {
@@ -175,6 +177,28 @@ const transports = [
         });
 
         container.appendChild(plot);
+
+        // Créer la légende personnalisée en position absolute
+        const legend = document.createElement("div");
+        legend.className = "absolute top-4 left-4 bg-white/95 p-3 rounded-lg shadow-md border border-gray-200 z-10";
+        legend.innerHTML = `
+            <div class="text-sm font-semibold mb-2">Émissions de CO₂ (kg CO₂e)</div>
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-4 h-4 rounded" style="background: #2ecc71"></div>
+                    <span class="text-xs">Faible</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-4 h-4 rounded" style="background: #f1c40f"></div>
+                    <span class="text-xs">Moyen</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-4 h-4 rounded" style="background: #e74c3c"></div>
+                    <span class="text-xs">Élevé</span>
+                </div>
+            </div>
+        `;
+        container.appendChild(legend);
     }
 
     document.addEventListener("DOMContentLoaded", () => {
