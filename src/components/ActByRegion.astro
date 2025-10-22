@@ -17,14 +17,14 @@ const regionStatsData = Array.from(
 ).sort((a, b) => b.moyennePOI - a.moyennePOI);
 ---
 
-<div class="w-full max-w-7xl mx-auto">
-    <div class="card bg-base-100 shadow-xl mb-8">
-        <div class="card-body">
-            <div id="regions-chart" class="w-full overflow-x-auto"></div>
-        </div>
+<div class="w-full max-w-7xl mx-auto px-6 pt-6">
+    <div
+        class="bg-gradient-to-b from-gray-50 to-white rounded-xl shadow-lg p-6 overflow-x-auto"
+    >
+        <div id="regions-chart" class="w-full"></div>
     </div>
 
-    <p class="text-sm text-base-content/60 text-center italic">
+    <p class="mt-8 mb-4 text-sm text-info italic">
         Attractivité touristique moyenne des régions françaises selon le nombre
         de points d'intérêt (POI) accessibles par gare.
     </p>
